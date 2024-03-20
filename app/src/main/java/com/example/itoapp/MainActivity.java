@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
     private TextInputEditText num_control;
     private TextInputEditText contraseña;
     FirebaseAuth mAuth;
-    String hola;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
