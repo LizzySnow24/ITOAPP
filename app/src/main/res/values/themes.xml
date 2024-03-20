@@ -1,0 +1,20 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.ITOAPP" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="Theme.ITOAPP" parent="Base.Theme.ITOAPP" />
+
+    <style name="SplashTheme" parent="Theme.ITOAPP">
+        <item name="android:windowBackground">
+            @drawable/rectangol
+        </item>
+    </style>
+    <style name="Redondo">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">46%</item>
+    </style>
+
+</resources>

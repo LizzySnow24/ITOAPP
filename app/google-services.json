@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "666468422822",
+    "project_id": "itoapp-e11fb",
+    "storage_bucket": "itoapp-e11fb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:666468422822:android:713f9fa56ec2275bd4d067",
+        "android_client_info": {
+          "package_name": "com.example.itoapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEwpOtjXzGsraSJ24YMcRN7O6r2IyUB1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

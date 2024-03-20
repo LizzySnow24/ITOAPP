@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="@drawable/rectagulo"
+    >
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="500dp"
+        android:layout_height="315dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/images" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="299dp"
+        android:layout_height="500dp"
+        android:background="@drawable/blanco"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView3"
+        app:layout_constraintVertical_bias="0.65">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="100dp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/numContainer"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="32dp"
+                android:layout_marginTop="16dp"
+
+                app:errorEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/numText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    tools:hint="Numero de control"
+                    tools:text="21630236"
+                    ></com.google.android.material.textfield.TextInputEditText>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="16dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="32dp"
+                android:id="@+id/pwdContainer"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:endIconMode="password_toggle"
+                app:errorEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    tools:hint="Contraseña"
+                    tools:text="Abc_123"
+
+                    ></com.google.android.material.textfield.TextInputEditText>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+
+                ></Space>
+
+
+            <TextView
+                android:id="@+id/textReset"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_gravity="center_horizontal"
+                android:onClick="recuperarContra"
+                android:text="¿Olvido su contraseña?"
+                android:textColor="#FB3232"
+                android:textSize="14sp"
+                android:textStyle="bold">
+
+            </TextView>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+
+
+                ></Space>
+
+            <Button
+                android:id="@+id/loginButton"
+                android:layout_width="236dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="@color/ama"
+                android:elevation="2dp"
+                android:onClick="Verificar"
+                android:text="Iniciar"
+                android:textColor="@color/cafe"
+                android:textSize="20dp"
+                android:textStyle="italic"></Button>
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="16dp"
+
+                >
+
+            </Space>
+
+            <TextView
+                android:id="@+id/Registrarse"
+                android:layout_width="232dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:onClick="abrirRegister"
+                android:text="¿Aún no tienes cuenta?, Registrate"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                >
+            </TextView>
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageView4"
+        android:layout_width="194dp"
+        android:layout_height="176dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.120000005"
+        app:shapeAppearanceOverlay="@style/Redondo"
+        app:srcCompat="@drawable/logo" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
