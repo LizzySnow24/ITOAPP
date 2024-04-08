@@ -62,7 +62,7 @@ public class register extends AppCompatActivity {
     }
     public boolean VerificarContraseña(String contra1, String contra2){
         boolean error=false;
-        Pattern patron = Pattern.compile("^[a-zA-Z0-9_]{12}$");
+        Pattern patron = Pattern.compile("^[a-zA-Z0-9_]{8,}$");
         if(!(patron.matcher(contra1).find())){
             Toast.makeText(this, "La contraseña debe tener 12 caracteres [A-Z,a-z,1-9,_]", Toast.LENGTH_LONG).show();
             error=true;

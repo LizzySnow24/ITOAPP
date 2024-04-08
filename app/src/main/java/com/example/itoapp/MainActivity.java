@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
     private TextInputEditText num_control;
     private TextInputEditText contraseña;
     FirebaseAuth mAuth;
-    String adios2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +53,11 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser user = mAuth.getCurrentUser();
         String id = mAuth.getCurrentUser().getUid();
 
-        if (!numControl.isEmpty()) {
-            if (!(password.isEmpty())) {
-                if (user != null && user.isEmailVerified()) {
+        if(user != null ){
+            Toast.makeText(MainActivity.this, "user: "+user.getUid(), Toast.LENGTH_LONG).show();
+        if (!user.isEmailVerified()) {
+            if (!numControl.isEmpty()) {
+                if (!(password.isEmpty())) {
                     mFirestore.collection("Users").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -74,19 +75,22 @@ public class MainActivity extends AppCompatActivity {
                                 } else {
                                     Toast.makeText(MainActivity.this, "El numero de control no se encuentra registrado", Toast.LENGTH_LONG).show();
                                 }
-                            }else{
+                            } else {
                                 Toast.makeText(MainActivity.this, "Realice su registro", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
-                }else{
-                    Toast.makeText(MainActivity.this, "No se ha verificado el registro del usuario", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "Ingrese contraseña", Toast.LENGTH_LONG).show();
                 }
-            }else{
-                Toast.makeText(MainActivity.this, "Ingrese contraseña", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(MainActivity.this, "Ingrese numero de control", Toast.LENGTH_LONG).show();
             }
-        }else{
-            Toast.makeText(MainActivity.this, "Ingrese numero de control", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(MainActivity.this, "BANDERA: "+user.isEmailVerified(), Toast.LENGTH_LONG).show();
+        }
+    }else{
+
         }
     }
 }
