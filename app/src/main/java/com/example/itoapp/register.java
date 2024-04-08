@@ -16,6 +16,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -64,7 +65,7 @@ public class register extends AppCompatActivity {
         boolean error=false;
         Pattern patron = Pattern.compile("^[a-zA-Z0-9_]{8,}$");
         if(!(patron.matcher(contra1).find())){
-            Toast.makeText(this, "La contraseña debe tener 12 caracteres [A-Z,a-z,1-9,_]", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "La contraseña debe tener al menos 8 caracteres [A-Z,a-z,1-9,_]", Toast.LENGTH_LONG).show();
             error=true;
         }else{
             if(!(contra1.equals(contra2))){
@@ -111,30 +112,48 @@ public class register extends AppCompatActivity {
         }
     }
 
-    private void crearUsuario(String direccion, String num_control, String contra) {
+    private void crearUsuario(final String direccion, final String num_control, final String contra) {
 
-        mAuth.createUserWithEmailAndPassword(direccion,contra).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        // Verificar si el número de control ya existe
+        mFirestore.collection("Users").document(num_control).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    String id = mAuth.getCurrentUser().getUid();
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("num_control",num_control);
-                    map.put("email",direccion);
-                    map.put("contraseña",contra);
-                    mFirestore.collection("Users").document(id).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
-                                Intent i = new Intent(register.this,MainActivity.class);
-                                startActivity(i);
-                                mandarCorreo();
-                                Toast.makeText(register.this, "El usuario se registró correctamente.", Toast.LENGTH_LONG).show();
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        // El número de control ya existe
+                        Toast.makeText(register.this, "El número de control ya está en uso.", Toast.LENGTH_LONG).show();
+                    } else {
+                        // El número de control no existe, proceder a crear el usuario
+                        mAuth.createUserWithEmailAndPassword(direccion, contra).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    Map<String, Object> map = new HashMap<>();
+                                    map.put("email", direccion);
+                                    map.put("contraseña", contra);
+                                    map.put("rol", "usuario");
+                                    mFirestore.collection("Users").document(num_control).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Intent i = new Intent(register.this, MainActivity.class);
+                                                startActivity(i);
+                                                Toast.makeText(register.this, "El usuario se registró correctamente.", Toast.LENGTH_LONG).show();
+                                                mandarCorreo();
+                                            } else {
+                                                Toast.makeText(register.this, "Error al registrar el usuario en Firestore: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    Toast.makeText(register.this, "Error al registrar el usuario: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                }
                             }
-                        }
-                    });
-                }else{
-                    Toast.makeText(register.this, "No se pudo registrar el usuario."+ task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                        });
+                    }
+                } else {
+                    Toast.makeText(register.this, "Error al verificar el número de control: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });

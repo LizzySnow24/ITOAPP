@@ -42,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(this, register.class);
         startActivity(i);
     }
+    public void abrirLoginAdmi(View v) {
+        Intent i = new Intent(this, login_admi.class);
+        startActivity(i);
+    }
     public void recuperarContra(View v) {
         Intent i = new Intent(this, recuperar_contra.class);
         startActivity(i);
@@ -50,47 +54,39 @@ public class MainActivity extends AppCompatActivity {
     public void Verificar(View v) {
         String numControl = num_control.getText().toString();
         String password = contraseña.getText().toString();
-        FirebaseUser user = mAuth.getCurrentUser();
-        String id = mAuth.getCurrentUser().getUid();
 
-        if(user != null ){
-            Toast.makeText(MainActivity.this, "user: "+user.getUid(), Toast.LENGTH_LONG).show();
-        if (!user.isEmailVerified()) {
-            if (!numControl.isEmpty()) {
-                if (!(password.isEmpty())) {
-                    mFirestore.collection("Users").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if (documentSnapshot.exists()) {
-                                String NumControl = documentSnapshot.getString("num_control");
-                                String contra = documentSnapshot.getString("contraseña");
-                                if (NumControl.equals(numControl)) {
-                                    if (contra.equals(password)) {
-                                        // Toast.makeText(MainActivity.this, ":)", Toast.LENGTH_LONG).show();
-                                        Intent i = new Intent(MainActivity.this, Menu.class);
-                                        startActivity(i);
+                if (!numControl.isEmpty()) {
+                    if (!password.isEmpty()) {
+                        // Consultar Firestore para obtener el documento con el número de control proporcionado
+                        mFirestore.collection("Users").document(numControl).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if (documentSnapshot.exists()) {
+                                    // Comparar el ID del documento con el número de control
+                                    String documentId = documentSnapshot.getId();
+                                    if (documentId.equals(numControl)) {
+                                        // El número de control coincide, verificar la contraseña
+                                        String contra = documentSnapshot.getString("contraseña");
+                                        if (contra.equals(password)) {
+                                            // Contraseña correcta, redirigir al menú
+                                            Intent i = new Intent(MainActivity.this, Menu.class);
+                                            startActivity(i);
+                                        } else {
+                                            Toast.makeText(MainActivity.this, "Contraseña incorrecta", Toast.LENGTH_LONG).show();
+                                        }
                                     } else {
-                                        Toast.makeText(MainActivity.this, "Contraseña incorrecta", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(MainActivity.this, "El número de control no se encuentra registrado", Toast.LENGTH_LONG).show();
                                     }
                                 } else {
-                                    Toast.makeText(MainActivity.this, "El numero de control no se encuentra registrado", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(MainActivity.this, "Realice su registro", Toast.LENGTH_LONG).show();
                                 }
-                            } else {
-                                Toast.makeText(MainActivity.this, "Realice su registro", Toast.LENGTH_LONG).show();
                             }
-                        }
-                    });
+                        });
+                    } else {
+                        Toast.makeText(MainActivity.this, "Ingrese contraseña", Toast.LENGTH_LONG).show();
+                    }
                 } else {
-                    Toast.makeText(MainActivity.this, "Ingrese contraseña", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Ingrese número de control", Toast.LENGTH_LONG).show();
                 }
-            } else {
-                Toast.makeText(MainActivity.this, "Ingrese numero de control", Toast.LENGTH_LONG).show();
-            }
-        } else {
-            Toast.makeText(MainActivity.this, "BANDERA: "+user.isEmailVerified(), Toast.LENGTH_LONG).show();
-        }
-    }else{
-
-        }
     }
 }

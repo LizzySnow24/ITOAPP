@@ -51,13 +51,13 @@
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/numText"
+                    android:id="@+id/codigo_acceso"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    tools:hint="Numero de control"
-                    tools:text="21630236"
-                    ></com.google.android.material.textfield.TextInputEditText>
+                    android:textColor="#000000"
+                    tools:hint="Código de acceso"
+                    tools:text="21630236"></com.google.android.material.textfield.TextInputEditText>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -76,26 +76,39 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
+                    android:textColor="#000000"
                     tools:hint="Contraseña"
-                    tools:text="Abc_123"
 
-                    ></com.google.android.material.textfield.TextInputEditText>
+                    tools:text="Abc_123"></com.google.android.material.textfield.TextInputEditText>
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+
+                ></Space>
 
 
             <TextView
                 android:id="@+id/textReset"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="48dp"
                 android:layout_gravity="center_horizontal"
                 android:onClick="recuperarContra"
                 android:text="¿Olvido su contraseña?"
-                android:textColor="#D32F2F"
+                android:textColor="#FB3232"
                 android:textSize="14sp"
                 android:textStyle="bold">
 
             </TextView>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+
+
+                ></Space>
 
             <Button
                 android:id="@+id/loginButton"
@@ -109,7 +122,6 @@
                 android:textColor="@color/cafe"
                 android:textSize="20dp"
                 android:textStyle="italic"></Button>
-
             <Space
                 android:layout_width="wrap_content"
                 android:layout_height="16dp"
@@ -121,26 +133,15 @@
             <TextView
                 android:id="@+id/Registrarse"
                 android:layout_width="232dp"
-                android:layout_height="43dp"
+                android:layout_height="48dp"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:onClick="abrirRegister"
                 android:text="¿Aún no tienes cuenta?, Registrate"
                 android:textSize="14sp"
-                android:textStyle="bold"></TextView>
-
-            <TextView
-                android:id="@+id/Login_admin"
-                android:layout_width="232dp"
-                android:layout_height="33dp"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:onClick="abrirLoginAdmi"
-                android:text="Iniciar sesión como administrador"
-                android:textColor="#757575"
-                android:textSize="14sp"
-                android:textStyle="bold"></TextView>
-
+                android:textStyle="bold"
+                >
+            </TextView>
         </LinearLayout>
 
     </FrameLayout>
