@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/home_20"
     tools:context=".Menu">
 
     <LinearLayout
@@ -21,6 +22,7 @@
         android:layout_alignParentBottom="true">
 
         <LinearLayout
+            android:id="@+id/homeLayout"
             android:background="@drawable/round_home_100"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
@@ -31,12 +33,14 @@
             android:layout_weight="1">
 
             <ImageView
+                android:id="@+id/HomeImage"
                 android:layout_width="20dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:src="@drawable/casa"/>
 
             <TextView
+                android:id="@+id/HomeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Home"
@@ -48,7 +52,8 @@
         </LinearLayout>
 
         <LinearLayout
-            android:background="@drawable/round_home_100"
+            android:id="@+id/OptionsLayout"
+            android:background="@android:color/transparent"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:orientation="horizontal"
@@ -58,15 +63,18 @@
             android:layout_weight="1">
 
             <ImageView
+                android:id="@+id/OptionsImage"
                 android:layout_width="20dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:src="@drawable/ave"/>
 
             <TextView
+                android:id="@+id/OptionsText"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Opciones"
+                android:text="Options"
                 android:textStyle="bold"
                 android:textColor="@color/menu"
                 android:layout_marginStart="10dp"
@@ -75,7 +83,8 @@
         </LinearLayout>
 
         <LinearLayout
-            android:background="@drawable/round_home_100"
+            android:id="@+id/ProfilLayout"
+            android:background="@android:color/transparent"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:orientation="horizontal"
@@ -85,15 +94,18 @@
             android:layout_weight="1">
 
             <ImageView
+                android:id="@+id/ProfilImage"
                 android:layout_width="20dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:src="@drawable/perfil"/>
+                android:src="@drawable/ave"/>
 
             <TextView
+                android:id="@+id/ProfilText"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Home"
+                android:text="Profil"
                 android:textStyle="bold"
                 android:textColor="@color/perfil"
                 android:layout_marginStart="10dp"
