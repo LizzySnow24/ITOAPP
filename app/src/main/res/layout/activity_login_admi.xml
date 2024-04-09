@@ -54,10 +54,10 @@
                     android:id="@+id/codigo_acceso"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
+                    android:inputType="text"
                     android:textColor="#000000"
                     tools:hint="Código de acceso"
-                    tools:text="21630236"></com.google.android.material.textfield.TextInputEditText>
+                    tools:text=""></com.google.android.material.textfield.TextInputEditText>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -91,12 +91,22 @@
 
 
             <TextView
-                android:id="@+id/textReset"
+                android:id="@+id/etiqueta1"
+                android:layout_width="wrap_content"
+                android:layout_height="31dp"
+                android:layout_gravity="center_horizontal"
+                android:text="En caso de olvidar contraseña"
+                android:textColor="#FB3232"
+                android:textSize="14sp"
+                android:textStyle="bold">
+
+            </TextView>
+            <TextView
+                android:id="@+id/etiqueta2"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_gravity="center_horizontal"
-                android:onClick="recuperarContra"
-                android:text="¿Olvido su contraseña?"
+                android:text="Contactar a la institución."
                 android:textColor="#FB3232"
                 android:textSize="14sp"
                 android:textStyle="bold">
@@ -117,7 +127,7 @@
                 android:layout_gravity="center_horizontal"
                 android:backgroundTint="@color/ama"
                 android:elevation="2dp"
-                android:onClick="Verificar"
+                android:onClick="verificar_admi"
                 android:text="Iniciar"
                 android:textColor="@color/cafe"
                 android:textSize="20dp"
@@ -130,18 +140,6 @@
 
             </Space>
 
-            <TextView
-                android:id="@+id/Registrarse"
-                android:layout_width="232dp"
-                android:layout_height="48dp"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:onClick="abrirRegister"
-                android:text="¿Aún no tienes cuenta?, Registrate"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                >
-            </TextView>
         </LinearLayout>
 
     </FrameLayout>
