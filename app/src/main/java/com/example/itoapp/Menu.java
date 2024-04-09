@@ -64,7 +64,7 @@ public class Menu extends AppCompatActivity {
         OptionsLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(seleccion != 1){
+                if(seleccion != 2){
                     //las otras pestañas esperan a ser seleccionadas
                     HomeText.setVisibility(View.GONE);
                     ProfilText.setVisibility(View.GONE);
@@ -75,25 +75,48 @@ public class Menu extends AppCompatActivity {
                     HomeLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
                     ProfilLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
-                    //seleccionamos inicio
+                    //seleccionamos opciones
                     OptionsText.setVisibility(View.VISIBLE);
                     OptionsImage.setImageResource(R.drawable.ave);
-                    OptionsLayout.setBackgroundResource(R.drawable.round_home_100);
+                    OptionsLayout.setBackgroundResource(R.drawable.round_options_100);
 
                     //creamos animación
-                    ScaleAnimation scaleAnimation = new ScaleAnimation(0.8f,1.0f,1f,1f, Animation.RELATIVE_TO_SELF,0.0f,Animation.RELATIVE_TO_SELF,0.0f);
+                    ScaleAnimation scaleAnimation = new ScaleAnimation(0.8f,1.0f,1f,1f, Animation.RELATIVE_TO_SELF,1.0f,Animation.RELATIVE_TO_SELF,0.0f);
                     scaleAnimation.setDuration(200);
                     scaleAnimation.setFillAfter(true);
-                    HomeLayout.startAnimation(scaleAnimation);
-                    //establecemos que la primera pestaña de seleccion es home
-                    seleccion = 1;
+                    OptionsLayout.startAnimation(scaleAnimation);
+                    //establecemos que la segunda pestaña de seleccion es opciones
+                    seleccion = 2;
                 }
             }
         });
         ProfilLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(seleccion != 3){
+                    //las otras pestañas esperan a ser seleccionadas
+                    OptionsText.setVisibility(View.GONE);
+                    HomeText.setVisibility(View.GONE);
 
+                    OptionsImage.setImageResource(R.drawable.ave);
+                    HomeImage.setImageResource(R.drawable.casa);
+
+                    OptionsLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                    HomeLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+
+                    //seleccionamos perfil
+                    ProfilText.setVisibility(View.VISIBLE);
+                    ProfilImage.setImageResource(R.drawable.ave);
+                    ProfilLayout.setBackgroundResource(R.drawable.round_profil_100);
+
+                    //creamos animación
+                    ScaleAnimation scaleAnimation = new ScaleAnimation(0.8f,1.0f,1f,1f, Animation.RELATIVE_TO_SELF,1.0f,Animation.RELATIVE_TO_SELF,0.0f);
+                    scaleAnimation.setDuration(200);
+                    scaleAnimation.setFillAfter(true);
+                    ProfilLayout.startAnimation(scaleAnimation);
+                    //establecemos que la tercera pestaña de seleccion es perfil
+                    seleccion = 3;
+                }
             }
         });
 
