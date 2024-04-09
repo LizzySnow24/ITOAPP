@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,7 +34,31 @@ public class Menu extends AppCompatActivity {
         HomeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //verificamos que el selector esta en home
+                if(seleccion == 1){
+                    //las otras pestañas esperan a ser seleccionadas
+                    OptionsText.setVisibility(View.GONE);
+                    ProfilText.setVisibility(View.GONE);
 
+                    OptionsImage.setImageResource(R.drawable.ave);
+                    ProfilImage.setImageResource(R.drawable.ave);
+
+                    OptionsLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                    ProfilLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+
+                    //seleccionamos inicio
+                    HomeText.setVisibility(View.VISIBLE);
+                    HomeImage.setImageResource(R.drawable.casa);
+                    HomeLayout.setBackgroundResource(R.drawable.round_home_100);
+
+                    //creamos animación
+                    ScaleAnimation scaleAnimation = new ScaleAnimation(0.8f,1.0f,1f,1f, Animation.RELATIVE_TO_SELF,0.0f,Animation.RELATIVE_TO_SELF,0.0f);
+                    scaleAnimation.setDuration(200);
+                    scaleAnimation.setFillAfter(true);
+                    HomeLayout.startAnimation(scaleAnimation);
+                    //establecemos que la primera pestaña de seleccion es home
+                    seleccion = 1;
+                }
             }
         });
         OptionsLayout.setOnClickListener(new View.OnClickListener() {
