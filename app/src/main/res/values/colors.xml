@@ -5,4 +5,12 @@
     <color name="amarillo">#FFFFC107</color>
     <color name="ama">#FFFBCF32</color>
     <color name="cafe">#624611</color>
+
+    <color name="home">#FFFFC107</color>
+    <color name="perfil">#FFFFC107</color>
+    <color name="menu">#FFFFC107</color>
+
+    <color name="home_20">#E9FFD863</color>
+    <color name="perfil_20">#E9FFD863</color>
+    <color name="menu_20">#E9FFD863</color>
 </resources>

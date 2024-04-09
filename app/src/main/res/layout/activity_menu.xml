@@ -4,15 +4,4 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Menu">
-
-    <TextView
-        android:id="@+id/BIENVENIDO"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="BIENVENIDO :)"
-        android:textStyle="bold"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="179dp"
-        tools:layout_editor_absoluteY="328dp" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    tools:context=".Menu"/>
