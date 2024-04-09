@@ -37,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
         mFirestore = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
     }
+    public void startActivity(View v){
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
+    }
 
     public void abrirRegister(View v) {
         Intent i = new Intent(this, register.class);
