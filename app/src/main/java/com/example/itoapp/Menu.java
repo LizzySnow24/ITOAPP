@@ -31,11 +31,23 @@ public class Menu extends AppCompatActivity {
         final TextView OptionsText = findViewById(R.id.OptionsText);
         final TextView ProfilText = findViewById(R.id.ProfilText);
 
+        //agregamos la pantalla de home para que aparezca por default
+        getSupportFragmentManager().beginTransaction()
+                        .setReorderingAllowed(true)
+                                .replace(R.id.fragmentContainer, HomeFragment.class,null)
+                                        .commit();
         HomeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //verificamos que el selector esta en home
                 if(seleccion != 1){
+
+                    //agregamos la pantalla de home
+                    getSupportFragmentManager().beginTransaction()
+                            .setReorderingAllowed(true)
+                            .replace(R.id.fragmentContainer, HomeFragment.class,null)
+                            .commit();
+
                     //las otras pestañas esperan a ser seleccionadas
                     OptionsText.setVisibility(View.GONE);
                     ProfilText.setVisibility(View.GONE);
@@ -65,6 +77,13 @@ public class Menu extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(seleccion != 2){
+
+                    //agregamos la pantalla de home
+                    getSupportFragmentManager().beginTransaction()
+                            .setReorderingAllowed(true)
+                            .replace(R.id.fragmentContainer, HomeFragment.class,null)
+                            .commit();
+
                     //las otras pestañas esperan a ser seleccionadas
                     HomeText.setVisibility(View.GONE);
                     ProfilText.setVisibility(View.GONE);
@@ -94,6 +113,13 @@ public class Menu extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(seleccion != 3){
+
+                    //agregamos la pantalla de home
+                    getSupportFragmentManager().beginTransaction()
+                            .setReorderingAllowed(true)
+                            .replace(R.id.fragmentContainer, HomeFragment.class,null)
+                            .commit();
+
                     //las otras pestañas esperan a ser seleccionadas
                     OptionsText.setVisibility(View.GONE);
                     HomeText.setVisibility(View.GONE);
@@ -119,6 +145,5 @@ public class Menu extends AppCompatActivity {
                 }
             }
         });
-
     }
 }
