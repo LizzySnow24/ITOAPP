@@ -35,7 +35,7 @@ public class Menu extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //verificamos que el selector esta en home
-                if(seleccion == 1){
+                if(seleccion != 1){
                     //las otras pestañas esperan a ser seleccionadas
                     OptionsText.setVisibility(View.GONE);
                     ProfilText.setVisibility(View.GONE);
@@ -64,7 +64,30 @@ public class Menu extends AppCompatActivity {
         OptionsLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(seleccion != 1){
+                    //las otras pestañas esperan a ser seleccionadas
+                    HomeText.setVisibility(View.GONE);
+                    ProfilText.setVisibility(View.GONE);
 
+                    HomeImage.setImageResource(R.drawable.casa);
+                    ProfilImage.setImageResource(R.drawable.ave);
+
+                    HomeLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                    ProfilLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+
+                    //seleccionamos inicio
+                    OptionsText.setVisibility(View.VISIBLE);
+                    OptionsImage.setImageResource(R.drawable.ave);
+                    OptionsLayout.setBackgroundResource(R.drawable.round_home_100);
+
+                    //creamos animación
+                    ScaleAnimation scaleAnimation = new ScaleAnimation(0.8f,1.0f,1f,1f, Animation.RELATIVE_TO_SELF,0.0f,Animation.RELATIVE_TO_SELF,0.0f);
+                    scaleAnimation.setDuration(200);
+                    scaleAnimation.setFillAfter(true);
+                    HomeLayout.startAnimation(scaleAnimation);
+                    //establecemos que la primera pestaña de seleccion es home
+                    seleccion = 1;
+                }
             }
         });
         ProfilLayout.setOnClickListener(new View.OnClickListener() {
