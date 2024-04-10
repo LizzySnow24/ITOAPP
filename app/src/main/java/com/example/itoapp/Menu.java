@@ -61,8 +61,8 @@ public class Menu extends AppCompatActivity {
                     OptionsText.setVisibility(View.GONE);
                     ProfilText.setVisibility(View.GONE);
 
-                    OptionsImage.setImageResource(R.drawable.ave);
-                    ProfilImage.setImageResource(R.drawable.ave);
+                    OptionsImage.setImageResource(R.drawable.ave_sombreado);
+                    ProfilImage.setImageResource(R.drawable.ave_sombreado);
 
                     OptionsLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
                     ProfilLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
@@ -97,8 +97,8 @@ public class Menu extends AppCompatActivity {
                     HomeText.setVisibility(View.GONE);
                     ProfilText.setVisibility(View.GONE);
 
-                    HomeImage.setImageResource(R.drawable.casa);
-                    ProfilImage.setImageResource(R.drawable.ave);
+                    HomeImage.setImageResource(R.drawable.home_sombreado);
+                    ProfilImage.setImageResource(R.drawable.ave_sombreado);
 
                     HomeLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
                     ProfilLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
@@ -133,8 +133,8 @@ public class Menu extends AppCompatActivity {
                     OptionsText.setVisibility(View.GONE);
                     HomeText.setVisibility(View.GONE);
 
-                    OptionsImage.setImageResource(R.drawable.ave);
-                    HomeImage.setImageResource(R.drawable.casa);
+                    OptionsImage.setImageResource(R.drawable.ave_sombreado);
+                    HomeImage.setImageResource(R.drawable.home_sombreado);
 
                     OptionsLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
                     HomeLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
