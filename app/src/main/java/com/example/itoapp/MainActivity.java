@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
@@ -72,8 +71,11 @@ public class MainActivity extends AppCompatActivity {
                                         // El número de control coincide, verificar la contraseña
                                         String contra = documentSnapshot.getString("contraseña");
                                         if (contra.equals(password)) {
+                                            //paso el rol del usuario a un string
+                                             String rol = documentSnapshot.getString("rol");
                                             // Contraseña correcta, redirigir al menú
                                             Intent i = new Intent(MainActivity.this, Menu.class);
+                                            i.putExtra("rol",rol);
                                             startActivity(i);
                                         } else {
                                             Toast.makeText(MainActivity.this, "Contraseña incorrecta", Toast.LENGTH_LONG).show();

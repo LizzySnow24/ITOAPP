@@ -45,8 +45,12 @@ public class login_admi extends AppCompatActivity {
                                 // El codigo coincide, verificar la contraseña
                                 String contra2 = documentSnapshot.getString("contraseña");
                                 if (contra.equals(contra2)) {
+                                    //guardamoes el rol para mandar a las otras ventanas
+                                    String rol = documentSnapshot.getString("rol");
                                     // Contraseña correcta, redirigir al menú
                                     Intent i = new Intent(login_admi.this, Menu.class);
+                                    //mando como extra el rol
+                                    i.putExtra("rol",rol);
                                     startActivity(i);
                                 } else {
                                     Toast.makeText(login_admi.this, "Contraseña incorrecta", Toast.LENGTH_LONG).show();

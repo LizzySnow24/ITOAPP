@@ -14,10 +14,19 @@ public class Menu extends AppCompatActivity {
 
     //el numero es la casilla que seleccione, en total tenemos 3, podemos elegir entre las 3
     private int seleccion = 1;
+    //la variable que almacena el rol de usuario que ingreso en ese momento
+    private static String rol;
+
+    public static String getRol() {
+        return rol;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
+        // Obtener el rol de la clase MainActivity (login)
+        rol = getIntent().getStringExtra("rol");
 
         final LinearLayout HomeLayout = findViewById(R.id.homeLayout);
         final LinearLayout OptionsLayout = findViewById(R.id.OptionsLayout);
