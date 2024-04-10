@@ -47,16 +47,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="32dp"
                 android:layout_marginTop="16dp"
-
-                app:errorEnabled="true">
+                app:errorEnabled="true"
+                app:counterEnabled="true"
+                android:hint="Numero de control"
+                app:counterMaxLength="8">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/numText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    tools:hint="Numero de control"
-                    tools:text="21630236"
+                    android:textColor="#000000"
                     ></com.google.android.material.textfield.TextInputEditText>
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -69,6 +70,7 @@
                 android:id="@+id/pwdContainer"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:endIconMode="password_toggle"
+                android:hint="Contraseña"
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -76,10 +78,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
-                    tools:hint="Contraseña"
-                    tools:text="Abc_123"
-
-                    ></com.google.android.material.textfield.TextInputEditText>
+                    android:textColor="#000000"
+                    tools:text="Abc_123"></com.google.android.material.textfield.TextInputEditText>
 
             </com.google.android.material.textfield.TextInputLayout>
 

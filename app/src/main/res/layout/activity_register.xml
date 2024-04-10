@@ -47,7 +47,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="32dp"
                 android:layout_marginTop="3dp"
-
+                app:counterEnabled="true"
+                app:counterMaxLength="8"
+                android:hint="Número de control"
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -57,8 +59,7 @@
                     android:inputType="number"
                     android:textColor="#000000"
                     android:textStyle="bold"
-                    tools:hint="Número de control"
-                    tools:text="21630236"></com.google.android.material.textfield.TextInputEditText>
+                    ></com.google.android.material.textfield.TextInputEditText>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -69,8 +70,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="32dp"
                 android:layout_marginTop="3dp"
-
-                app:errorEnabled="true">
+                app:errorEnabled="true"
+                android:hint="Dirección de correo">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/email"
@@ -79,8 +80,7 @@
                     android:inputType="textEmailAddress"
                     android:textColor="#000000"
                     android:textStyle="bold"
-                    tools:hint="Direccion de correo"
-                    tools:text="21630236@itocotlan.com"></com.google.android.material.textfield.TextInputEditText>
+                    ></com.google.android.material.textfield.TextInputEditText>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,7 +92,8 @@
                 android:id="@+id/pass1Container"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:endIconMode="password_toggle"
-                app:errorEnabled="true">
+                app:errorEnabled="true"
+                android:hint="Contraseña">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextPassword"
@@ -101,7 +102,7 @@
                     android:inputType="textPassword"
                     android:textColor="#000000"
                     android:textStyle="bold"
-                    tools:hint="Contraseña"></com.google.android.material.textfield.TextInputEditText>
+                    ></com.google.android.material.textfield.TextInputEditText>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -113,7 +114,8 @@
                 android:id="@+id/pwdContainer"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:endIconMode="password_toggle"
-                app:errorEnabled="true">
+                app:errorEnabled="true"
+                android:hint="Contraseña">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextConfirmPassword"
@@ -122,7 +124,7 @@
                     android:inputType="textPassword"
                     android:textColor="#000000"
                     android:textStyle="bold"
-                    tools:hint="Contraseña"></com.google.android.material.textfield.TextInputEditText>
+                    ></com.google.android.material.textfield.TextInputEditText>
 
             </com.google.android.material.textfield.TextInputLayout>
 
