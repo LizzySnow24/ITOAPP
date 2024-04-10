@@ -1,5 +1,6 @@
 package com.example.itoapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,18 +13,18 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class HomeFragment extends Fragment {
-    String rol="";
+    String rol = "";
 
 
     public HomeFragment() {
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -38,20 +39,24 @@ public class HomeFragment extends Fragment {
         // Verificar si el rol es "admin" para mostrar u ocultar el botón flotante
         if (rol != null && rol.equals("admin")) {
             boton_publicar.setVisibility(View.VISIBLE);
+            // Agregar el listener al botón flotante si es necesario
+            boton_publicar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    abrir_crearPubli(); // Método para abrir la nueva actividad
+                }
+            });
         } else {
             boton_publicar.setVisibility(View.GONE);
         }
 
-        // Agregar el listener al botón flotante si es necesario
-        boton_publicar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Acciones que deseas realizar cuando se hace clic en el botón flotante
-            }
-        });
-
-        Toast.makeText(getActivity(), "rol: "+ rol, Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), "rol: " + rol, Toast.LENGTH_LONG).show();
 
         return view;
+    }
+    // Método para abrir la nueva actividad
+    private void abrir_crearPubli() {
+        Intent intent = new Intent(getActivity(), activity_crearPubli.class); // Reemplaza NuevaActividad.class con el nombre de tu actividad
+        startActivity(intent);
     }
 }
