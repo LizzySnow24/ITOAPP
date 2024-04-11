@@ -14,7 +14,7 @@
     </style>
     <style name="Redondo">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">46%</item>
+        <item name="cornerSize">52%</item>
     </style>
 
 </resources>

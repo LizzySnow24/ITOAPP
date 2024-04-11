@@ -90,7 +90,7 @@ public class Menu extends AppCompatActivity {
                     //agregamos la pantalla de home
                     getSupportFragmentManager().beginTransaction()
                             .setReorderingAllowed(true)
-                            .replace(R.id.fragmentContainer, HomeFragment.class,null)
+                            .replace(R.id.fragmentContainer, Fragment_Optiones.class,null)
                             .commit();
 
                     //las otras pestañas esperan a ser seleccionadas
@@ -123,7 +123,7 @@ public class Menu extends AppCompatActivity {
             public void onClick(View v) {
                 if(seleccion != 3){
 
-                    //agregamos la pantalla de home
+                    //agregamos la pantalla de opciones
                     getSupportFragmentManager().beginTransaction()
                             .setReorderingAllowed(true)
                             .replace(R.id.fragmentContainer, HomeFragment.class,null)
