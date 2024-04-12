@@ -4,6 +4,81 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity_PlanEstudios">
+    tools:context=".Activity_PlanEstudios"
+    android:background="@drawable/rectagulo">
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="352dp"
+        android:layout_height="650dp"
+        android:background="@drawable/rectangulo_degradado"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.90">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="90dp" />
+
+        <TextView
+            android:id="@+id/Text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Plan de Estudios"
+            android:textSize="26dp"
+            android:textStyle="bold"
+            android:layout_marginTop="26dp"
+            android:layout_marginHorizontal="20dp"
+            android:textColor="@color/cafe"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1.8dp"
+            android:background="@color/cafe"
+            android:layout_marginTop="85dp"
+            android:layout_below="@id/Text"
+            android:layout_marginHorizontal="19dp"
+            android:outlineAmbientShadowColor="@color/cafe"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
+
+        <TextView
+            android:id="@+id/Text2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Retícula"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:layout_marginTop="95dp"
+            android:layout_marginHorizontal="20dp"
+            android:textColor="@color/cafe"/>
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            />
+
+    </FrameLayout>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageView2"
+        android:layout_width="136dp"
+        android:layout_height="124dp"
+        android:layout_weight="1"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.03"
+        app:layout_constraintHorizontal_bias="0.92"
+        app:shapeAppearanceOverlay="@style/Redondo"
+        app:srcCompat="@drawable/logo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

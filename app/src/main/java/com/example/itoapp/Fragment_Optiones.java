@@ -53,7 +53,7 @@ public class Fragment_Optiones extends Fragment {
         Opcion_PlanEstudios.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
+                Intent i = new Intent(getActivity(), Activity_PlanEstudios.class);
                 startActivity(i);
             }
         });

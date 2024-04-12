@@ -13,8 +13,6 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class HomeFragment extends Fragment {
-    String rol = "";
-
 
     public HomeFragment() {
     }
