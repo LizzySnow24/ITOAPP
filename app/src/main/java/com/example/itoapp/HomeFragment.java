@@ -56,7 +56,7 @@ public class HomeFragment extends Fragment {
     }
     // Método para abrir la nueva actividad
     private void abrir_crearPubli() {
-        Intent intent = new Intent(getActivity(), activity_crearPubli.class); // Reemplaza NuevaActividad.class con el nombre de tu actividad
+        Intent intent = new Intent(getActivity(), activity_crearPubli.class);
         startActivity(intent);
     }
 }

@@ -28,15 +28,33 @@ public class Fragment_Optiones extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        LinearLayout menuLayout = view.findViewById(R.id.Opcion_CLE);
+        LinearLayout Opcion_CLE = view.findViewById(R.id.Opcion_CLE);
+        LinearLayout Opcion_SII = view.findViewById(R.id.Opcion_SII);
+        LinearLayout Opcion_PlanEstudios = view.findViewById(R.id.Opcion_PlanEstudios);
 
-        menuLayout.setOnClickListener(new View.OnClickListener() {
+        Opcion_CLE.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String url = "https://sites.google.com/view/itocle/p%C3%A1gina-principal"; // URL de CLE
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse(url));
                 startActivity(intent);
+            }
+        });
+        Opcion_SII.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "http://148.233.77.139/sistema/"; // URL de CLE
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
+                startActivity(intent);
+            }
+        });
+        Opcion_PlanEstudios.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                startActivity(i);
             }
         });
     }

@@ -15,6 +15,9 @@
         android:theme="@style/Theme.ITOAPP"
         tools:targetApi="31">
         <activity
+            android:name=".Activity_PlanEstudios"
+            android:exported="false" />
+        <activity
             android:name=".activity_crearPubli"
             android:exported="false" />
         <activity
