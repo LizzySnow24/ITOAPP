@@ -64,7 +64,7 @@ public class activity_crearPubli extends AppCompatActivity {
         });
         //Establece lista del spinner
         Spinner lista_Semestres = (Spinner) findViewById(R.id.lista);
-        String[] datosSemestres = new String[]{"Selecciona el semestre","1er. Semestre", "2do. Semestre", "3er. Semestre", "4to. Semestre", "5to. Semestre", "6to. Semestre", "7mo. Semestre", "8vo. Semestre", "9no. Semestre"};
+        String[] datosSemestres = new String[]{"Seleccionar semestre","1er. Semestre", "2do. Semestre", "3er. Semestre", "4to. Semestre", "5to. Semestre", "6to. Semestre", "7mo. Semestre", "8vo. Semestre", "9no. Semestre"};
         ArrayAdapter adapterSemestres = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item, datosSemestres);
         adapterSemestres.setDropDownViewResource(R.layout.spinner_item);
         lista_Semestres.setAdapter(adapterSemestres);

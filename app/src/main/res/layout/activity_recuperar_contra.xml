@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="32dp"
                 android:layout_marginTop="16dp"
-
+                android:hint="Correo electrónico"
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -67,9 +67,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
-                    tools:hint="Correo electrónico"
-                    tools:text="21630236@itocotlan.com"
-                    ></com.google.android.material.textfield.TextInputEditText>
+                    android:textColor="#000000"></com.google.android.material.textfield.TextInputEditText>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -84,7 +82,7 @@
                 android:layout_gravity="center_horizontal"
                 android:backgroundTint="@color/ama"
                 android:elevation="2dp"
-                android:onClick="Verificar"
+                android:onClick="recuperar"
                 android:text="Recuperar"
                 android:textColor="@color/cafe"
                 android:textSize="20dp"

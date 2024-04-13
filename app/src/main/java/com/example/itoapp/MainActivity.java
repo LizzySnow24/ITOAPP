@@ -8,8 +8,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -60,34 +64,38 @@ public class MainActivity extends AppCompatActivity {
 
                 if (!numControl.isEmpty()) {
                     if (!password.isEmpty()) {
-                        // Consultar Firestore para obtener el documento con el número de control proporcionado
-                        mFirestore.collection("Users").document(numControl).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                if (documentSnapshot.exists()) {
-                                    // Comparar el ID del documento con el número de control
-                                    String documentId = documentSnapshot.getId();
-                                    if (documentId.equals(numControl)) {
-                                        // El número de control coincide, verificar la contraseña
-                                        String contra = documentSnapshot.getString("contraseña");
-                                        if (contra.equals(password)) {
-                                            //paso el rol del usuario a un string
-                                             String rol = documentSnapshot.getString("rol");
-                                            // Contraseña correcta, redirigir al menú
-                                            Intent i = new Intent(MainActivity.this, Menu.class);
-                                            i.putExtra("rol",rol);
-                                            startActivity(i);
+                        mAuth.signInWithEmailAndPassword(numControl + "@itocotlan.com", password)
+                                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (task.isSuccessful()) {
+                                            // Inicio de sesión exitoso, obtener el usuario actual
+                                            FirebaseUser user = mAuth.getCurrentUser();
+                                            if (user != null) {
+                                                // El inicio de sesión fue exitoso, redirigir al menú
+                                                // Obtener el rol del usuario desde Firestore
+                                                mFirestore.collection("Users").document(numControl)
+                                                        .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                            @Override
+                                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                                if (documentSnapshot.exists()) {
+                                                                    String rol = documentSnapshot.getString("rol");
+                                                                    Intent i = new Intent(MainActivity.this, Menu.class);
+                                                                    i.putExtra("rol", rol);
+                                                                    startActivity(i);
+                                                                } else {
+                                                                    // El usuario no tiene datos adicionales en Firestore
+                                                                    Toast.makeText(MainActivity.this, "El número de control no se encuentra registrado", Toast.LENGTH_LONG).show();
+                                                                }
+                                                            }
+                                                        });
+                                            }
                                         } else {
-                                            Toast.makeText(MainActivity.this, "Contraseña incorrecta", Toast.LENGTH_LONG).show();
+                                            // Error en el inicio de sesión
+                                            Toast.makeText(MainActivity.this, "Número de control o contraseña incorrectos", Toast.LENGTH_LONG).show();
                                         }
-                                    } else {
-                                        Toast.makeText(MainActivity.this, "El número de control no se encuentra registrado", Toast.LENGTH_LONG).show();
                                     }
-                                } else {
-                                    Toast.makeText(MainActivity.this, "Realice su registro", Toast.LENGTH_LONG).show();
-                                }
-                            }
-                        });
+                                });
                     } else {
                         Toast.makeText(MainActivity.this, "Ingrese contraseña", Toast.LENGTH_LONG).show();
                     }

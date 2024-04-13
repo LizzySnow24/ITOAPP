@@ -76,13 +76,23 @@ public class register extends AppCompatActivity {
         return error;
     }
 
-    public String Direccion(){
-        String direccion = email.getText().toString();
-        Pattern validar = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$");
-        if(!(validar.matcher(direccion).find())) {
-            Toast.makeText(this, "Correo no válido.", Toast.LENGTH_LONG).show();
+    public boolean Direccion(String direccion){
+        Pattern validar = Pattern.compile("^(\\d{8}@itocotlan\\.com)|(L\\d{8}@ocotlan\\.tecnm\\.mx)$");
+        boolean DireccionValida=false;
+
+        if(direccion.isEmpty()) {
+            email.setError("Ingrese correo electrónico");
+            DireccionValida=false;
         }
-        return direccion;
+
+        if(!(validar.matcher(direccion).find())) {
+            email.setError("Correo electrónico inválido");
+            DireccionValida=false;
+        }else {
+            email.setError(null);
+            DireccionValida = true;
+        }
+        return DireccionValida;
     }
     public void mandarCorreo(){
         FirebaseUser user = mAuth.getCurrentUser();
@@ -92,6 +102,7 @@ public class register extends AppCompatActivity {
         Registrar();
     }
     public void Registrar(){
+        String direccion = email.getText().toString();
         String num_control = numText.getText().toString();
         String contra1 = contra.getText().toString();
         String contra2 = confirmcontra.getText().toString();
@@ -101,7 +112,9 @@ public class register extends AppCompatActivity {
                 boolean numValido = VerificarNumero(num_control);
                 boolean contrasenaValida = VerificarContraseña(contra1, contra2);
                 if (numValido==false && contrasenaValida==false) {
-                    crearUsuario(Direccion(),num_control,contra1);
+                    if(Direccion(direccion)==true) {
+                        crearUsuario(direccion, num_control, contra1);
+                    }
                 }
             }else{
                 contra.setError("Ingrese contraseña");
@@ -113,7 +126,6 @@ public class register extends AppCompatActivity {
     }
 
     private void crearUsuario(final String direccion, final String num_control, final String contra) {
-
         // Verificar si el número de control ya existe
         mFirestore.collection("Users").document(num_control).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -125,13 +137,14 @@ public class register extends AppCompatActivity {
                         Toast.makeText(register.this, "El número de control ya está en uso.", Toast.LENGTH_LONG).show();
                     } else {
                         // El número de control no existe, proceder a crear el usuario
-                        mAuth.createUserWithEmailAndPassword(direccion, contra).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        mAuth.createUserWithEmailAndPassword(num_control + "@itocotlan.com", contra)
+                                .addOnCompleteListener(new OnCompleteListener<AuthResult>(){
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     Map<String, Object> map = new HashMap<>();
-                                    map.put("email", direccion);
-                                    map.put("contraseña", contra);
+                                    map.put("num_control", num_control);
+                                    map.put("correo",direccion);
                                     map.put("rol", "usuario");
                                     mFirestore.collection("Users").document(num_control).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
@@ -140,7 +153,7 @@ public class register extends AppCompatActivity {
                                                 Intent i = new Intent(register.this, MainActivity.class);
                                                 startActivity(i);
                                                 Toast.makeText(register.this, "El usuario se registró correctamente.", Toast.LENGTH_LONG).show();
-                                                mandarCorreo();
+                                                //mandarCorreo();
                                             } else {
                                                 Toast.makeText(register.this, "Error al registrar el usuario en Firestore: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                             }
