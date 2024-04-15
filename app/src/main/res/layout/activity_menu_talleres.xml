@@ -180,7 +180,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Actividades que rigorisan tu           espíritu deportivo."
+                    android:text="Actividades que rigorisan tu espíritu deportivo."
                     android:textAlignment="center"
                     android:textColor="#000000"
                     android:textSize="18sp"
@@ -265,4 +265,19 @@
 
     </LinearLayout>
     </ScrollView>
+
+    <!-- Botón flotante -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/boton_editar1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ave_sombreado"
+        app:backgroundTint="@color/white"
+        app:elevation="10dp"
+        app:fabSize="normal" />
+
 </RelativeLayout>

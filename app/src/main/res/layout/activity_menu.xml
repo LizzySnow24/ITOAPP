@@ -81,7 +81,7 @@
                 android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Opciones"
+                android:text="Herramientas"
                 android:textStyle="bold"
                 android:textColor="@color/menu"
                 android:layout_marginStart="10dp"

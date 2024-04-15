@@ -4,10 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/home_20"
+    android:background="@color/ama"
     tools:context=".HomeFragment">
-
-    <!-- Contenedor principal de tu diseño -->
 
     <!-- Botón flotante -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -16,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ave"
+        android:src="@drawable/ave_sombreado"
         app:backgroundTint="@color/white"
         app:elevation="6dp"
         app:fabSize="normal" />
