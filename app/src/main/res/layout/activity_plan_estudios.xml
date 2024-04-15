@@ -18,44 +18,42 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.50">
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="90dp" />
+        <RelativeLayout
+            android:layout_width="326dp"
+            android:layout_height="120dp"
+            android:layout_marginRight="20dp">
 
-        <TextView
-            android:id="@+id/Text"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Plan de Estudios"
-            android:textSize="26dp"
-            android:textStyle="bold"
-            android:layout_marginTop="26dp"
-            android:layout_marginHorizontal="20dp"
-            android:textColor="@color/cafe"/>
+            <TextView
+                android:id="@+id/Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="26dp"
+                android:text="Plan de Estudios"
+                android:textColor="@color/cafe"
+                android:textSize="26dp"
+                android:textStyle="bold" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1.8dp"
-            android:background="@color/cafe"
-            android:layout_marginTop="85dp"
-            android:layout_below="@id/Text"
-            android:layout_marginHorizontal="19dp"
-            android:outlineAmbientShadowColor="@color/cafe"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1.8dp"
+                android:layout_below="@id/Text"
+                android:layout_marginHorizontal="19dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/cafe"
+                android:outlineAmbientShadowColor="@color/cafe" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="100dp" />
-
-        <TextView
-            android:id="@+id/Text2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Retícula"
-            android:textSize="25dp"
-            android:textStyle="bold"
-            android:layout_marginTop="95dp"
-            android:layout_marginHorizontal="20dp"
-            android:textColor="@color/cafe"/>
+            <TextView
+                android:id="@+id/Text2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="75dp"
+                android:text="Retícula"
+                android:textColor="@color/cafe"
+                android:textSize="25dp"
+                android:textStyle="bold" />
+        </RelativeLayout>
 
         <Spinner
             android:id="@+id/lista_carreras"

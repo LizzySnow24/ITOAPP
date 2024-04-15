@@ -15,22 +15,8 @@
         android:layout_height="wrap_content">
 
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/topAppBarMenu"
-                style="@style/Widget.MaterialComponents.Toolbar.Primary"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:elevation="6dp"
-                app:menu="@menu/topbar_talleres"
-                app:navigationIcon="@drawable/flecha_atras"
-                app:title=""/>
-
-        </com.google.android.material.appbar.AppBarLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

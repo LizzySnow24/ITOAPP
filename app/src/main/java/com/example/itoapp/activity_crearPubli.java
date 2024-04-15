@@ -9,10 +9,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,9 +29,13 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class activity_crearPubli extends AppCompatActivity {
 
@@ -42,8 +49,8 @@ public class activity_crearPubli extends AppCompatActivity {
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
 
-    // Variable para almacenar la URI de la imagen seleccionada
-    Uri selectedImage;
+    // Lista para almacenar la URI de las imagenes seleccionadas
+    private List<Uri> selectedImages = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +66,7 @@ public class activity_crearPubli extends AppCompatActivity {
                 // Crear un intent para seleccionar una imagen de la galería
                 Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 // Iniciar la actividad para seleccionar una imagen
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 startActivityForResult(intent, PICK_IMAGE_REQUEST);
             }
         });
@@ -74,97 +82,154 @@ public class activity_crearPubli extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         // Verificar si el resultado es para seleccionar una imagen y si se seleccionó una imagen correctamente
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            // Obtener la URI de la imagen seleccionada
-            selectedImage = data.getData();
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
+            if (data.getClipData() != null) {
+                // Si se seleccionaron múltiples imágenes
+                int count = data.getClipData().getItemCount();
+                selectedImages.clear();
+                for (int i = 0; i < count; i++) {
+                    Uri imageUri = data.getClipData().getItemAt(i).getUri();
+                    selectedImages.add(imageUri);
+                }
+            } else if (data.getData() != null) {
+                // Si se seleccionó solo una imagen
+                Uri imageUri = data.getData();
+                selectedImages.clear();
+                selectedImages.add(imageUri);
+            }
+            // Actualiza la interfaz para mostrar las imágenes seleccionadas
+            mostrarImagenesSeleccionadas();
+        }
+    }
 
-            // Obtener referencia a la ImageView dentro del CardView
-            ImageView imagenPubli = findViewById(R.id.imagenPubli);
-            imagenPubli.setImageURI(selectedImage);
+    private void mostrarImagenesSeleccionadas() {
+        // Referencia a tu GridLayout
+        GridLayout layoutImagenes = findViewById(R.id.layoutImagenes);
+
+        // Calcula la cantidad de filas necesarias
+        int numFilas = (int) Math.ceil((double) selectedImages.size() / 2);
+
+        // Configura la cantidad de columnas y filas en el GridLayout
+        layoutImagenes.setRowCount(numFilas);
+
+        // Añade cada imagen al layout
+        layoutImagenes.getColumnCount();
+
+        // Añade cada imagen seleccionada al GridLayout
+        for (Uri imageUri : selectedImages) {
+            ImageView imageView = new ImageView(this);
+            imageView.setImageURI(imageUri);
+
+            // Configura el tamaño y otras propiedades para cada imagen según tus necesidades
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+
+            // Establece la posición de la imagen en la cuadrícula
+            params.rowSpec = GridLayout.spec(1);
+            params.columnSpec = GridLayout.spec(1);
+            //params.setMargins(8, 8, 8, 8); // Ajusta los márgenes de las imágenes
+
+            imageView.setLayoutParams(new GridLayout.LayoutParams(
+                    new ViewGroup.LayoutParams(getResources().getDisplayMetrics().widthPixels / layoutImagenes.getColumnCount(),
+                            getResources().getDisplayMetrics().heightPixels/2)
+            ));
+
+            // Añade la imagen al GridLayout
+            layoutImagenes.addView(imageView);
+
         }
     }
 
     public void publicar(View v){
-
         // Obtener referencias al EditText y al TextView dentro del CardView
         EditText editTextTexto = findViewById(R.id.editTextTexto);
-        TextView textView = findViewById(R.id.text_view);
 
         // Obtener el texto ingresado en el EditText
         String texto = editTextTexto.getText().toString().trim();
 
-        // Obtener referencia a la ImageView dentro del CardView
-        ImageView imagenPubli = findViewById(R.id.imagenPubli);
-
-        // Verificar si se ha seleccionado una imagen
-        Drawable drawable = imagenPubli.getDrawable();
-        boolean imagenSeleccionada = (drawable != null);
+        // Verificar si se han seleccionado imágenes
+        boolean imagenSeleccionada = !selectedImages.isEmpty();
 
         // Obtener el semestre seleccionado del Spinner
         Spinner lista_semestres = findViewById(R.id.lista);
         String semestreSeleccionado = lista_semestres.getSelectedItem().toString();
 
-        // Verificar si el texto y la imagen están presentes
-        // Verificar si el usuario ha ingresado texto o seleccionado una imagen
         if (!texto.isEmpty() || imagenSeleccionada) {
-
-            // Clasificar y mostrar contenido según el semestre seleccionado
-            if(semestreSeleccionado.equals("Selecciona el semestre")){
+            if(semestreSeleccionado.equals("Seleccionar semestre")) {
                 Toast.makeText(this, "Por favor, seleccione un semestre para continuar", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            // Mostrar el ProgressBar
+            ProgressBar progressBar = findViewById(R.id.progressBar);
+            progressBar.setVisibility(View.VISIBLE);
 
-            }else{
+            if (imagenSeleccionada) {
+                //Arreglo que va a almacenar los url de todas las imagenes
+                List<String> imageUrls = new ArrayList<>();
+                //variable para saber cuantas imagenes hay en mi lista
+                int imageCount = selectedImages.size();
+                AtomicInteger uploadedCount = new AtomicInteger(0);
 
-                if (imagenSeleccionada) {
+                for (Uri imageUri : selectedImages) {
                     StorageReference imagenRef = storageRef.child("imagenes/" + UUID.randomUUID().toString());
-                    String nombreImagen = imagenRef.getName(); // Obtener el nombre único de la imagen
-                    imagenRef.putFile(selectedImage)
-                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                    imagenRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                        @Override
-                                        public void onSuccess(Uri uri) {
-                                            String urlDeLaImagen = uri.toString();
-                                            DocumentReference semestreRef = db.collection("Semestre").document(semestreSeleccionado);
-                                            CollectionReference publicacionesRef = semestreRef.collection("publicaciones");
-                                            Map<String, Object> publicacion = new HashMap<>();
-                                            if (!texto.isEmpty()) {
-                                                publicacion.put("texto", texto);
-                                            }
-                                            publicacion.put("imagen", urlDeLaImagen);
-                                            publicacion.put("nombreImagen", nombreImagen); // Guardar el nombre único de la imagen
-                                            publicacionesRef.add(publicacion)
-                                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                        @Override
-                                                        public void onSuccess(DocumentReference documentReference) {
-                                                            Toast.makeText(activity_crearPubli.this, "Publicación agregada correctamente", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    })
-                                                    .addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
-                                                            Toast.makeText(activity_crearPubli.this, "Error al agregar la publicación", Toast.LENGTH_SHORT).show();
-                                                            Log.e("Firestore", "Error al agregar la publicación", e);
-                                                        }
-                                                    });
-                                        }
-                                    });
-                                }
+                    String nombreImagen = imagenRef.getName();
+                    imagenRef.putFile(imageUri)
+                            .addOnSuccessListener(taskSnapshot -> {
+                                imagenRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                    String urlDeLaImagen = uri.toString();
+                                    imageUrls.add(urlDeLaImagen);
+                                    uploadedCount.incrementAndGet();
+
+                                    if (uploadedCount.get() == imageCount) {
+                                        // Ocultar el ProgressBar antes de guardar la publicación
+                                        progressBar.setVisibility(View.GONE);
+                                        guardarPublicacion(texto, imageUrls, nombreImagen, semestreSeleccionado);
+
+                                    }
+                                });
                             })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(activity_crearPubli.this, "Error al subir la imagen", Toast.LENGTH_SHORT).show();
-                                    Log.e("FirebaseStorage", "Error al subir la imagen", e);
-                                }
+                            .addOnFailureListener(e -> {
+                                progressBar.setVisibility(View.GONE);
+                                Toast.makeText(activity_crearPubli.this, "Error al subir la imagen", Toast.LENGTH_SHORT).show();
+                                Log.e("FirebaseStorage", "Error al subir la imagen", e);
                             });
-                } else {
-                    Toast.makeText(this, "No se ha seleccionado ninguna imagen.", Toast.LENGTH_SHORT).show();
                 }
+            } else {
+                progressBar.setVisibility(View.GONE);
+                guardarPublicacion(texto, Collections.emptyList(), null, semestreSeleccionado);
             }
         } else {
-            // Mostrar un mensaje de error si el usuario no ha ingresado texto ni seleccionado una imagen
             Toast.makeText(this, "Por favor, ingrese texto o seleccione una imagen.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void guardarPublicacion(String texto, List<String> imageUrls, String nombreImagen, String semestreSeleccionado) {
+        DocumentReference semestreRef = db.collection("Semestre").document(semestreSeleccionado);
+        CollectionReference publicacionesRef = semestreRef.collection("publicaciones");
+
+        Map<String, Object> publicacion = new HashMap<>();
+        if (!texto.isEmpty()) {
+            publicacion.put("texto", texto);
+        }
+        if (!imageUrls.isEmpty()) {
+            publicacion.put("imagenes", imageUrls);
+        }
+        if (nombreImagen != null) {
+            publicacion.put("nombreImagen", nombreImagen);
+        }
+
+        publicacionesRef.add(publicacion)
+                .addOnSuccessListener(documentReference -> {
+                    Toast.makeText(activity_crearPubli.this, "Publicación agregada correctamente", Toast.LENGTH_SHORT).show();
+                    finish();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(activity_crearPubli.this, "Error al agregar la publicación", Toast.LENGTH_SHORT).show();
+                    Log.e("Firestore", "Error al agregar la publicación", e);
+                });
+    }
+    public void cancelar(View v){
+        finish();
     }
 }

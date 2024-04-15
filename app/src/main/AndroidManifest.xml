@@ -15,6 +15,15 @@
         android:theme="@style/Theme.ITOAPP"
         tools:targetApi="31">
         <activity
+            android:name=".Activity_Taller_Deportivo"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_Taller_Civico"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_Menu_Talleres"
+            android:exported="false" />
+        <activity
             android:name=".Activity_PlanEstudios"
             android:exported="false" />
         <activity
