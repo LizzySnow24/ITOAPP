@@ -16,9 +16,17 @@ public class Menu extends AppCompatActivity {
     private int seleccion = 1;
     //la variable que almacena el rol de usuario que ingreso en ese momento
     private static String rol;
+    private static String semestre;
+    private static String documento;
 
     public static String getRol() {
         return rol;
+    }
+    public static String getSemestre() {
+        return semestre;
+    }
+    public static String getDocumento() {
+        return documento;
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +35,8 @@ public class Menu extends AppCompatActivity {
 
         // Obtener el rol de la clase MainActivity (login)
         rol = getIntent().getStringExtra("rol");
+        semestre = getIntent().getStringExtra("semestre");
+        documento = getIntent().getStringExtra("documento");
 
         final LinearLayout HomeLayout = findViewById(R.id.homeLayout);
         final LinearLayout OptionsLayout = findViewById(R.id.OptionsLayout);

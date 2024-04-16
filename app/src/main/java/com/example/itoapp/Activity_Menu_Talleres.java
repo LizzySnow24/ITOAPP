@@ -10,7 +10,6 @@ import android.view.View;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class Activity_Menu_Talleres extends AppCompatActivity {
-    private static String rol;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

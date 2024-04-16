@@ -36,12 +36,12 @@
                 android:textSize="18sp"/>
         </LinearLayout>
 
-        <!-- ImageView para mostrar la imagen -->
-        <ImageView
-            android:id="@+id/image_view"
+        <!-- RecyclerView para mostrar las imágenes -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/image_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="303dp"
-            android:scaleType="centerCrop" />
+            android:layout_height="294dp" />
+
 
         <TextView
             android:id="@+id/text_view2"

@@ -86,10 +86,6 @@
                 android:textSize="40dp"
                 android:textStyle="bold" />
 
-
-
-
-
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card0"
                 style="@style/Widget.Material3.CardView.Elevated"
@@ -98,13 +94,11 @@
                 android:layout_margin="30dp"
                 app:cardElevation="8dp">
 
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/white"
                     android:orientation="horizontal">
-
 
                     <ImageView
                         android:layout_width="145dp"
@@ -115,18 +109,18 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:padding="16dp">
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="130dp"
                             android:layout_height="wrap_content"
                             android:text="Banda de Guerra y Escolta"
                             android:textAlignment="viewStart"
                             android:textAppearance="?attr/textAppearanceHeadline6"
-                            android:textColor="#000000"
-                            android:textSize="18dp"
+                            android:textColor="#070D7A"
+                            android:textSize="17dp"
                             android:textStyle="bold|italic" />
 
                         <TextView
@@ -139,9 +133,10 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/instructor"
+                            android:text="Gustavo Valdovinos Solis "
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gustavo Valdovinos Solis 392 112 6769"
                             android:textColor="#000000"
                             android:textSize="14dp" />
 
@@ -149,15 +144,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="Estatus:"
+                            android:text="Teléfono:"
                             android:textColor="#000000"
                             android:textSize="14dp"
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/textTel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Honorarios"
+                            android:text="392 112 6769"
                             android:textColor="#000000"
                             android:textSize="14dp" />
 
@@ -171,6 +167,7 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/textHorario"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Lunes, Martes y Jueves     | 19:00 - 22:00 |"
@@ -187,6 +184,7 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/textLugar"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Cancha de Básquetbol"
@@ -210,6 +208,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/textInicioTaller"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -255,9 +254,11 @@
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="30dp" />
+
         </LinearLayout>
 
     </ScrollView>
+
     <!-- Botón flotante -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/boton_editar2"

@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -185,7 +186,6 @@ public class activity_crearPubli extends AppCompatActivity {
                                         // Ocultar el ProgressBar antes de guardar la publicación
                                         progressBar.setVisibility(View.GONE);
                                         guardarPublicacion(texto, imageUrls, nombreImagen, semestreSeleccionado);
-
                                     }
                                 });
                             })
@@ -221,8 +221,14 @@ public class activity_crearPubli extends AppCompatActivity {
 
         publicacionesRef.add(publicacion)
                 .addOnSuccessListener(documentReference -> {
+                    String referenciaDocumento = documentReference.getId();
+                    String semestre = semestreSeleccionado;
                     Toast.makeText(activity_crearPubli.this, "Publicación agregada correctamente", Toast.LENGTH_SHORT).show();
-                    finish();
+                    Intent intent = new Intent(activity_crearPubli.this, Menu.class);
+                    intent.putExtra("semestre",semestre);
+                    intent.putExtra("documento",referenciaDocumento);
+                    startActivity(intent);
+                    //finish();
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(activity_crearPubli.this, "Error al agregar la publicación", Toast.LENGTH_SHORT).show();
@@ -232,4 +238,5 @@ public class activity_crearPubli extends AppCompatActivity {
     public void cancelar(View v){
         finish();
     }
+
 }
