@@ -219,6 +219,9 @@ public class activity_crearPubli extends AppCompatActivity {
             publicacion.put("nombreImagen", nombreImagen);
         }
 
+        long fecha = System.currentTimeMillis();
+        publicacion.put("fecha", fecha);
+
         publicacionesRef.add(publicacion)
                 .addOnSuccessListener(documentReference -> {
                     String referenciaDocumento = documentReference.getId();

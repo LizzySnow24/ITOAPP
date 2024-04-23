@@ -278,6 +278,7 @@
         android:src="@drawable/ave_sombreado"
         app:backgroundTint="@color/white"
         app:elevation="10dp"
+        android:visibility="gone"
         app:fabSize="normal" />
 
 </RelativeLayout>

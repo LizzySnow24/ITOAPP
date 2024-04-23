@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -19,13 +20,23 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
     // Instancia de FirebaseFirestore
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    String semestre;
+    String documento;
+    List <Datos_Publicacion> lista_datos;
+
     public HomeFragment() {
     }
 
@@ -39,9 +50,33 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        lista_datos = new ArrayList<>();
+        semestre = Menu.getSemestre();
+        documento = Menu.getDocumento();
+        //Referencia de la base de datos donde tengo almacenados las imagenes y texto
+        DocumentReference documentoRef = db.collection("Semestre")
+                .document(semestre)
+                .collection("publicaciones")
+                .document(documento);
 
-        //String semestre=Menu.getSemestre();
-        //String documento= Menu.getDocumento();
+        documentoRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.e(TAG, "Error al obtener datos del documento", error);
+                    return;
+                }
+
+                if (value != null && value.exists()) {
+                    Datos_Publicacion data = value.toObject(Datos_Publicacion.class);
+                    lista_datos.add(data);
+                } else {
+                    Log.d(TAG, "El documento no existe o no tiene datos");
+                }
+                //aqui va el adapter
+            }
+        });
+
         //este es mi boton flotante
         FloatingActionButton boton_publicar = view.findViewById(R.id.boton_publicar);
 
@@ -51,7 +86,6 @@ public class HomeFragment extends Fragment {
         // Verificar si el rol es "admin" para mostrar u ocultar el botón flotante
         if (rol != null && rol.equals("admin")) {
             boton_publicar.setVisibility(View.VISIBLE);
-            // Agregar el listener al botón flotante si es necesario
             boton_publicar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -62,47 +96,13 @@ public class HomeFragment extends Fragment {
             boton_publicar.setVisibility(View.GONE);
         }
 
-        Toast.makeText(getActivity(), "rol: " + rol, Toast.LENGTH_LONG).show();
-        //Toast.makeText(getActivity(), "semestre: " + semestre, Toast.LENGTH_LONG).show();
-        //Toast.makeText(getActivity(), "documento: " + documento, Toast.LENGTH_LONG).show();
-
 
         return view;
     }
+
     // Método para abrir la nueva actividad
     private void abrir_crearPubli() {
         Intent intent = new Intent(getActivity(), activity_crearPubli.class);
         startActivity(intent);
-    }
-    private void GuardarCampos(){
-        String semestre=Menu.getSemestre();
-        String documento= Menu.getDocumento();
-        //Referencia de la base de datos donde tengo almacenados las imagenes y texto
-        DocumentReference documentoRef = db.collection("Semestre")
-                .document(semestre)
-                .collection("publicaciones")
-                .document(documento);
-
-        // Acceder a los datos del documento
-        documentoRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-
-                    // El documento existe, puedes acceder a sus datos
-                    String texto = documentSnapshot.getString("texto");
-
-                    List<String> imagenes = (List<String>) documentSnapshot.get("imagenes");
-
-                } else {
-                    Log.d(TAG, "El documento no existe");
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e(TAG, "Error al obtener el documento", e);
-            }
-        });
     }
 }
