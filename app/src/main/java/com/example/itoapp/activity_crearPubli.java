@@ -156,7 +156,7 @@ public class activity_crearPubli extends AppCompatActivity {
         Spinner lista_semestres = findViewById(R.id.lista);
         String semestreSeleccionado = lista_semestres.getSelectedItem().toString();
 
-        if (!texto.isEmpty() || imagenSeleccionada) {
+        if (!texto.isEmpty() && imagenSeleccionada) {
             if(semestreSeleccionado.equals("Seleccionar semestre")) {
                 Toast.makeText(this, "Por favor, seleccione un semestre para continuar", Toast.LENGTH_SHORT).show();
                 return;
@@ -200,7 +200,7 @@ public class activity_crearPubli extends AppCompatActivity {
                 guardarPublicacion(texto, Collections.emptyList(), null, semestreSeleccionado);
             }
         } else {
-            Toast.makeText(this, "Por favor, ingrese texto o seleccione una imagen.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Por favor, ingrese texto y seleccione una imagen.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -228,8 +228,6 @@ public class activity_crearPubli extends AppCompatActivity {
                     String semestre = semestreSeleccionado;
                     Toast.makeText(activity_crearPubli.this, "Publicación agregada correctamente", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(activity_crearPubli.this, Menu.class);
-                    intent.putExtra("semestre",semestre);
-                    intent.putExtra("documento",referenciaDocumento);
                     startActivity(intent);
                     //finish();
                 })

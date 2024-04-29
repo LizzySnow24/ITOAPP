@@ -6,13 +6,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,15 +25,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,55 +52,16 @@ public class Activity_Taller_Civico extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private StorageReference storageRef = storage.getReference();
-
+    final Map<String, Object> textos = new HashMap<>();
     private Uri selectedImageUri;
-
-    private DocumentReference documentoRef;
-
-    public void MandarTextoBD(int instruId, int telId, int horaId, int placeId, int inicioTallerId, int imagenId){
-        TextView instru = findViewById(instruId);
-        TextView tel = findViewById(telId);
-        TextView hora = findViewById(horaId);
-        TextView place = findViewById(placeId);
-        TextView inicioTaller = findViewById(inicioTallerId);
-        ImageView imagen = findViewById(imagenId);
-
-        //referencia a storage
-        StorageReference imagenRef = storageRef.child("imagenes_talleres/" + UUID.randomUUID().toString());
-
-        documentoRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    String textInstructor = documentSnapshot.getString("instructor");
-                    String textHorario = documentSnapshot.getString("horario");
-                    String textLugar = documentSnapshot.getString("lugar");
-                    String textTelefono = documentSnapshot.getString("telefono");
-                    String textInicio_talleres = documentSnapshot.getString("inicio_talleres");
-                    String imagenurl = documentSnapshot.getString("url_imagen");
-
-                    instru.setText(textInstructor);
-                    hora.setText(textHorario);
-                    place.setText(textLugar);
-                    tel.setText(textTelefono);
-                    inicioTaller.setText(textInicio_talleres);
-                    // Carga la imagen
-                    Glide.with(getApplicationContext())
-                            .load(imagenurl)
-                            .into(imagen);
-                   // imagen.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
-                } else {
-                    Log.d(TAG, "El documento no existe");
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e(TAG, "Error al obtener el documento", e);
-            }
-        });
-    }
+    private List <DatosPublicacionTalleres> lista_datos;
+    private PublicacionTalleresAdapter mAdapter;
+    private RecyclerView mRecyclerView;
+    private String newTitulo;
+    private String newNombre;
+    private String newTel;
+    private String newLugar;
+    private String newHorario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,12 +69,8 @@ public class Activity_Taller_Civico extends AppCompatActivity {
         setContentView(R.layout.activity_taller_civico);
 
         FloatingActionButton boton_editar2 = findViewById(R.id.boton_editar2);
-        //Referencia de la base de datos donde tengo almacenados las imagenes y texto
-        documentoRef = db.collection("Talleres")
-                .document("civicos");
 
         String rol = Menu.getRol();
-        MandarTextoBD(R.id.instructor, R.id.textTel, R.id.textHorario, R.id.textLugar, R.id.textInicioTaller, R.id.imagen_civico);
 
         // Verificar si el rol es "admin" para mostrar u ocultar el botón flotante
         if (rol != null && rol.equals("admin")) {
@@ -111,17 +78,40 @@ public class Activity_Taller_Civico extends AppCompatActivity {
             boton_editar2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ModificarTextos(
-                            R.id.instructor, R.id.textTel, R.id.textHorario, R.id.textLugar, R.id.textInicioTaller
-                    );
+                    HacerPublicacion();
                 }
             });
         } else {
             boton_editar2.setVisibility(View.GONE);
         }
+
+        lista_datos = new ArrayList<>();
+
+        //TRAER TODOS LOS DATOS
+        db.collection("Talleres")
+                .document("civicos")
+                .collection("publicaciones")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        DatosPublicacionTalleres publicacion = document.toObject(DatosPublicacionTalleres.class);
+                        lista_datos.add(publicacion);
+                        //Log.d("DATO CIVICO",publicacion.getHorario());
+                    }
+                    mAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error al obtener publicaciones", e);
+                });
+        // Configurar RecyclerView y su adaptador
+        mRecyclerView =findViewById(R.id.recycle_taller_civico);
+        mAdapter = new PublicacionTalleresAdapter(Activity_Taller_Civico.this, lista_datos);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(Activity_Taller_Civico.this));
+        mRecyclerView.setAdapter(mAdapter);
     }
 
-    public void ModificarTextos(int instruId, int telId, int horaId, int placeId, int inicioTallerId){
+
+    public void HacerPublicacion(){
         // Infla el diseño personalizado para el cuadro de diálogo
         View dialogView = getLayoutInflater().inflate(R.layout.pantalla_editar_civicos, null);
 
@@ -129,35 +119,25 @@ public class Activity_Taller_Civico extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(Activity_Taller_Civico.this);
         builder.setView(dialogView);
 
-        // Obtén referencias a los EditText en el diseño personalizado
+        // ESTOS SON MIS TEXTOS DE MI CUADRO PARA INGRESAR LOS DATOS
+        EditText editTitu = dialogView.findViewById(R.id.editTitulo);
         EditText editTel = dialogView.findViewById(R.id.editTel);
         EditText editNombre = dialogView.findViewById(R.id.editinstructor);
         EditText editLugar = dialogView.findViewById(R.id.editLugar);
         EditText editHorario = dialogView.findViewById(R.id.editHorario);
-        EditText editInicio = dialogView.findViewById(R.id.editInicio);
 
-        // Obtén el texto actual de los TextView
-        TextView instru = findViewById(instruId);
-        TextView tel = findViewById(telId);
-        TextView hora = findViewById(horaId);
-        TextView place = findViewById(placeId);
-        TextView inicioTaller = findViewById(inicioTallerId);
-        String currentNombre = instru.getText().toString();
-        String currentTel = tel.getText().toString();
-        String currentLugar = place.getText().toString();
-        String currentHorario = hora.getText().toString();
-        String currentInicio = inicioTaller.getText().toString();
 
-        // Establece el texto actual en los EditText
-        editNombre.setText(currentNombre);
-        editTel.setText(currentTel);
-        editLugar.setText(currentLugar);
-        editHorario.setText(currentHorario);
-        editInicio.setText(currentInicio);
-        Button mostrarCambiar = dialogView.findViewById(R.id.mostrarCambiar);
+        // Obtén el texto actual de los TextView  ESTE ES MI CASCARON
+        /*TextView titulo = findViewById(tituloID);
+        TextView instru = findViewById(instructorID);
+        TextView tel = findViewById(telefonoID);
+        TextView hora = findViewById(horarioID);
+        TextView place = findViewById(lugarID);*/
+
+        Button mostrarCargar = dialogView.findViewById(R.id.mostrarCambiar);
 
         //desplegar el cambio de imagen
-        mostrarCambiar.setOnClickListener(new View.OnClickListener() {
+        mostrarCargar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LinearLayout contentLayout = dialogView.findViewById(R.id.contentLayout);
@@ -166,8 +146,8 @@ public class Activity_Taller_Civico extends AppCompatActivity {
         });
 
         //boton cambiar
-        Button change = dialogView.findViewById(R.id.btnChangeImage);
-        change.setOnClickListener(new View.OnClickListener() {
+        Button cargar = dialogView.findViewById(R.id.btnChangeImage);
+        cargar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Crear un Intent para seleccionar una imagen de la galería
@@ -180,18 +160,15 @@ public class Activity_Taller_Civico extends AppCompatActivity {
         // Configura los botones del cuadro de diálogo
         builder.setPositiveButton("Aceptar", (dialog, which) -> {
             // Obtén el texto ingresado en los EditText
-            String newNombre = editNombre.getText().toString();
-            String newTel = editTel.getText().toString();
-            String newLugar = editLugar.getText().toString();
-            String newHorario = editHorario.getText().toString();
-            String newInicio = editInicio.getText().toString();
+            newTitulo = editTitu.getText().toString();
+            newNombre = editNombre.getText().toString();
+            newTel = editTel.getText().toString();
+            newLugar = editLugar.getText().toString();
+            newHorario = editHorario.getText().toString();
 
-            //Referencia de la base de datos donde tengo almacenados las imagenes y texto
-            documentoRef = db.collection("Talleres")
-                    .document("civicos");
-
-            final Map<String, Object> textos = new HashMap<>();
-
+            if (!newTitulo.isEmpty()) {
+                textos.put("titulo", newTitulo);
+            }
             if (!newNombre.isEmpty()) {
                 textos.put("instructor", newNombre);
             }
@@ -204,31 +181,7 @@ public class Activity_Taller_Civico extends AppCompatActivity {
             if (!newLugar.isEmpty()) {
                 textos.put("lugar", newLugar);
             }
-            if (!newInicio.isEmpty()) {
-                textos.put("inicio_talleres", newInicio);
-            }
 
-
-            // Actualiza los datos en la base de datos
-            documentoRef.update(textos)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            // Manejar el éxito de la actualización
-                            Toast.makeText(Activity_Taller_Civico.this, "Datos actualizados correctamente", Toast.LENGTH_SHORT).show();
-
-                            // Mostrar los cambios en la aplicación
-                            MandarTextoBD(R.id.instructor, R.id.textTel, R.id.textHorario, R.id.textLugar, R.id.textInicioTaller, R.id.imagen_civico);
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            // Manejar el fallo de la actualización
-                            Log.e(TAG, "Error al actualizar datos", e);
-                            Toast.makeText(Activity_Taller_Civico.this, "Error al actualizar datos", Toast.LENGTH_SHORT).show();
-                        }
-                    });
         });
 
         builder.setNegativeButton("Cancelar", (dialog, which) -> {
@@ -255,21 +208,11 @@ public class Activity_Taller_Civico extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        ImageView imagen = findViewById(R.id.imagen_civico);
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             // Obtener la URI de la imagen seleccionada
             selectedImageUri = data.getData();
-            if (alertDialog != null) {
-                imagen = alertDialog.findViewById(R.id.imageView);
 
-                // Asegúrate de que la referencia del ImageView no sea nula
-                if (imagen != null) {
-                    // Establece la URI de la imagen seleccionada en el ImageView
-                    imagen.setImageURI(selectedImageUri);
-                }
-
-            }
             // Obtén una referencia a la ubicación donde se guardará la imagen en Storage
             StorageReference imagenRef = storageRef.child("imagenes_talleres/" + UUID.randomUUID().toString());
 
@@ -279,27 +222,42 @@ public class Activity_Taller_Civico extends AppCompatActivity {
                         // Obtiene la URL de la imagen recién subida
                         imagenRef.getDownloadUrl().addOnSuccessListener(uri -> {
                             String imageUrl = uri.toString();
-
-                            // Actualiza el URL de la imagen en la base de datos
-                            Map<String, Object> textos = new HashMap<>();
+                            // Notificar al adaptador sobre el cambio en los datos
                             textos.put("url_imagen", imageUrl);
+                            mAdapter.notifyDataSetChanged();//esto
 
-                            documentoRef.update(textos)
-                                    .addOnSuccessListener(aVoid -> {
-                                        // Actualización exitosa, muestra un mensaje
-                                        Toast.makeText(Activity_Taller_Civico.this, "Imagen actualizada correctamente", Toast.LENGTH_SHORT).show();
+                            //Referencia de la base de datos donde tengo almacenados las imagenes y texto
+                            DocumentReference documentoRef = db.collection("Talleres")
+                                    .document("civicos");
+                            // Cargamos los datos
+                            CollectionReference publicacionesRef = documentoRef.collection("publicaciones");
+
+                            // Después de agregar la publicación a la base de datos con éxito
+                            publicacionesRef.add(textos)
+                                    .addOnSuccessListener(documentReference -> {
+                                        // Crear un objeto DatosPublicacionTalleres con los datos ingresados
+                                        DatosPublicacionTalleres nuevaPublicacion = new DatosPublicacionTalleres();
+                                        nuevaPublicacion.setTitulo(newTitulo);
+                                        nuevaPublicacion.setInstructor(newNombre);
+                                        nuevaPublicacion.setTelefono(newTel);
+                                        nuevaPublicacion.setHorario(newHorario);
+                                        nuevaPublicacion.setLugar(newLugar);
+
+                                        // Agregar la nueva publicación a la lista
+                                        lista_datos.add(nuevaPublicacion);
+
+                                        // Notificar al adaptador sobre el cambio en los datos
+                                        mAdapter.notifyDataSetChanged();
+
+                                        // Mostrar un mensaje de éxito
+                                        Toast.makeText(Activity_Taller_Civico.this, "Publicación agregada correctamente", Toast.LENGTH_SHORT).show();
                                     })
                                     .addOnFailureListener(e -> {
-                                        // Error al actualizar el URL de la imagen en la base de datos
-                                        Log.e(TAG, "Error al actualizar URL de imagen", e);
-                                        Toast.makeText(Activity_Taller_Civico.this, "Error al actualizar URL de imagen", Toast.LENGTH_SHORT).show();
+                                        // Mostrar un mensaje de error en caso de falla
+                                        Toast.makeText(Activity_Taller_Civico.this, "Error al agregar la publicación", Toast.LENGTH_SHORT).show();
+                                        //Log.e("Firestore", "Error al agregar la publicación", e);
                                     });
                         });
-                    })
-                    .addOnFailureListener(e -> {
-                        // Error al cargar la imagen a Firebase Storage
-                        Log.e(TAG, "Error al cargar la imagen", e);
-                        Toast.makeText(Activity_Taller_Civico.this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
                     });
         }
     }

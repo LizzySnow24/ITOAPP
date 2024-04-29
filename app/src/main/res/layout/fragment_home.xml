@@ -21,25 +21,41 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:background="@color/white">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/logo2" />
-
-        <!-- TextView para mostrar el texto -->
-        <TextView
-            android:id="@+id/text_view"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="8dp"
-            android:textColor="@color/cafe"
-            android:text="   Instituto Tecnológico de Ocotlán"
-            android:textStyle="bold"
-            android:textSize="18sp"/>
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/logo2" />
+
+            <!-- TextView para mostrar el texto -->
+            <TextView
+                android:id="@+id/text_view"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical"
+                android:text="   Instituto Tecnológico de Ocotlán"
+                android:textColor="@color/cafe"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycle_Publicacion_Noticias"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+        </androidx.recyclerview.widget.RecyclerView>
+
     </LinearLayout>
+
 </FrameLayout>

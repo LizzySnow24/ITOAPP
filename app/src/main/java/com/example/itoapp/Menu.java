@@ -1,6 +1,8 @@
 package com.example.itoapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Menu extends AppCompatActivity {
 
@@ -16,18 +19,11 @@ public class Menu extends AppCompatActivity {
     private int seleccion = 1;
     //la variable que almacena el rol de usuario que ingreso en ese momento
     private static String rol;
-    private static String semestre;
-    private static String documento;
 
     public static String getRol() {
         return rol;
     }
-    public static String getSemestre() {
-        return semestre;
-    }
-    public static String getDocumento() {
-        return documento;
-    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +31,24 @@ public class Menu extends AppCompatActivity {
 
         // Obtener el rol de la clase MainActivity (login)
         rol = getIntent().getStringExtra("rol");
-        semestre = getIntent().getStringExtra("semestre");
-        documento = getIntent().getStringExtra("documento");
+
+        Toast.makeText(Menu.this, "Este es el Rol en menu: "+rol, Toast.LENGTH_SHORT).show();
+
+        Bundle bundle = new Bundle();
+
+        bundle.putString("rol", rol);
+
+        //Mando al fragment
+        HomeFragment fragment = new HomeFragment();
+        fragment.setArguments(bundle);
+
+        // Mostrar el fragmento en el contenedor correspondiente
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction =
+                fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentContainer,fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
 
         final LinearLayout HomeLayout = findViewById(R.id.homeLayout);
         final LinearLayout OptionsLayout = findViewById(R.id.OptionsLayout);

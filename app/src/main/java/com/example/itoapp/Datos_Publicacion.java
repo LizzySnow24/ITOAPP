@@ -7,7 +7,7 @@ public class Datos_Publicacion {
     private long fecha;
     private List<String> imageId;
 
-    public Datos_Publicacion(String texto, long fecha, List<String> imageId) {
+    public Datos_Publicacion() {
         this.texto = texto;
         this.fecha = fecha;
         this.imageId = imageId;
