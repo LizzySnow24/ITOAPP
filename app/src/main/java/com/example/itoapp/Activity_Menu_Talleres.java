@@ -16,18 +16,6 @@ public class Activity_Menu_Talleres extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_talleres);
 
-        FloatingActionButton boton_editar1 = findViewById(R.id.boton_editar1);
-
-        String rol = Menu.getRol();
-
-        // Verificar si el rol es "admin" para mostrar u ocultar el botón flotante
-        if (rol != null && rol.equals("admin")) {
-            boton_editar1.setVisibility(View.VISIBLE);
-            //ABRIR VENTANA EDITAR
-        } else {
-            boton_editar1.setVisibility(View.GONE);
-        }
-
         llamar_taller();
     }
 

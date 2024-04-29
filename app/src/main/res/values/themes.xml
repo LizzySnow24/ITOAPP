@@ -12,6 +12,7 @@
             @drawable/pantalla_carga
         </item>
     </style>
+
     <style name="Redondo">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">52%</item>

@@ -15,6 +15,23 @@
         android:theme="@style/Theme.ITOAPP"
         tools:targetApi="31">
         <activity
+            android:name=".Activity_Planeacion"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_Academicos"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_administrativos"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_Direccion"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_Personal"
+            android:exported="false"
+            android:label="@string/title_activity_personal"
+            android:theme="@style/Theme.ITOAPP" />
+        <activity
             android:name=".ArmarPublicacion"
             android:exported="false" />
         <activity

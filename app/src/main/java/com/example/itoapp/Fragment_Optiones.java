@@ -32,6 +32,7 @@ public class Fragment_Optiones extends Fragment {
         LinearLayout Opcion_SII = view.findViewById(R.id.Opcion_SII);
         LinearLayout Opcion_PlanEstudios = view.findViewById(R.id.Opcion_PlanEstudios);
         LinearLayout Opcion_Talleres = view.findViewById(R.id.Opcion_Talleres);
+        LinearLayout Opcion_Personal = view.findViewById(R.id.Opcion_Personal);
 
         Opcion_CLE.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +63,13 @@ public class Fragment_Optiones extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), Activity_Menu_Talleres.class);
+                startActivity(i);
+            }
+        });
+        Opcion_Personal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), Activity_Personal.class);
                 startActivity(i);
             }
         });
