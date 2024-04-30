@@ -173,6 +173,59 @@ public class Activity_Taller_Cultural extends AppCompatActivity {
                 textos2.put("lugar", newLugar);
             }
 
+            if(selectedImageUri!=null) {
+                // Obtén una referencia a la ubicación donde se guardará la imagen en Storage
+                StorageReference imagenRef = storageRef.child("imagenes_talleres/imagenes_culturales/" + UUID.randomUUID().toString());
+
+                // Sube la imagen seleccionada a Firebase Storage
+                imagenRef.putFile(selectedImageUri)
+                        .addOnSuccessListener(taskSnapshot -> {
+                            // Obtiene la URL de la imagen recién subida
+                            imagenRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                String imageUrl = uri.toString();
+
+                                textos2.put("url_imagen", imageUrl);
+
+                                //Referencia de la base de datos donde tengo almacenados las imagenes y texto
+                                DocumentReference documentoRef = db.collection("Talleres")
+                                        .document("culturales");
+
+                                // Cargamos los datos
+                                CollectionReference publicacionesRef = documentoRef.collection("taller1");
+
+                                // Después de agregar la publicación a la base de datos con éxito
+                                publicacionesRef.add(textos2)
+                                        .addOnSuccessListener(documentReference -> {
+                                            // Crear un objeto DatosPublicacionTalleres con los datos ingresados
+                                            DatosPublicacionTalleres nuevaPublicacion = new DatosPublicacionTalleres();
+                                            nuevaPublicacion.setTitulo(newTitulo);
+                                            nuevaPublicacion.setInstructor(newNombre);
+                                            nuevaPublicacion.setTelefono(newTel);
+                                            nuevaPublicacion.setHorario(newHorario);
+                                            nuevaPublicacion.setLugar(newLugar);
+
+                                            // Agregar la nueva publicación a la lista
+                                            lista_datos2.add(nuevaPublicacion);
+
+                                            // Notificar al adaptador sobre el cambio en los datos
+                                            mAdapter.notifyDataSetChanged();
+
+                                            // Mostrar un mensaje de éxito
+                                            Toast.makeText(Activity_Taller_Cultural.this, "Publicación agregada correctamente", Toast.LENGTH_SHORT).show();
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            // Mostrar un mensaje de error en caso de falla
+                                            Toast.makeText(Activity_Taller_Cultural.this, "Error al agregar la publicación", Toast.LENGTH_SHORT).show();
+                                            //Log.e("Firestore", "Error al agregar la publicación", e);
+                                        });
+                            });
+                        })
+                        .addOnFailureListener(e -> {
+                            // Error al cargar la imagen a Firebase Storage
+                            Log.e(TAG, "Error al cargar la imagen", e);
+                            Toast.makeText(Activity_Taller_Cultural.this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
+                        });
+            }
         });
 
         builder.setNegativeButton("Cancelar", (dialog, which) -> {
@@ -203,58 +256,7 @@ public class Activity_Taller_Cultural extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             // Obtener la URI de la imagen seleccionada
             selectedImageUri = data.getData();
-            // Obtén una referencia a la ubicación donde se guardará la imagen en Storage
-            StorageReference imagenRef = storageRef.child("imagenes_talleres/imagenes_culturales/" + UUID.randomUUID().toString());
 
-            // Sube la imagen seleccionada a Firebase Storage
-            imagenRef.putFile(selectedImageUri)
-                    .addOnSuccessListener(taskSnapshot -> {
-                        // Obtiene la URL de la imagen recién subida
-                        imagenRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                            String imageUrl = uri.toString();
-                            // Notificar al adaptador sobre el cambio en los datos
-                            mAdapter.notifyDataSetChanged();//esto
-                            textos2.put("url_imagen", imageUrl);
-
-                            //Referencia de la base de datos donde tengo almacenados las imagenes y texto
-                            DocumentReference documentoRef = db.collection("Talleres")
-                                    .document("culturales");
-
-                            // Cargamos los datos
-                            CollectionReference publicacionesRef = documentoRef.collection("taller1");
-
-                            // Después de agregar la publicación a la base de datos con éxito
-                            publicacionesRef.add(textos2)
-                                    .addOnSuccessListener(documentReference -> {
-                                        // Crear un objeto DatosPublicacionTalleres con los datos ingresados
-                                        DatosPublicacionTalleres nuevaPublicacion = new DatosPublicacionTalleres();
-                                        nuevaPublicacion.setTitulo(newTitulo);
-                                        nuevaPublicacion.setInstructor(newNombre);
-                                        nuevaPublicacion.setTelefono(newTel);
-                                        nuevaPublicacion.setHorario(newHorario);
-                                        nuevaPublicacion.setLugar(newLugar);
-
-                                        // Agregar la nueva publicación a la lista
-                                        lista_datos2.add(nuevaPublicacion);
-
-                                        // Notificar al adaptador sobre el cambio en los datos
-                                        mAdapter.notifyDataSetChanged();
-
-                                        // Mostrar un mensaje de éxito
-                                        Toast.makeText(Activity_Taller_Cultural.this, "Publicación agregada correctamente", Toast.LENGTH_SHORT).show();
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        // Mostrar un mensaje de error en caso de falla
-                                        Toast.makeText(Activity_Taller_Cultural.this, "Error al agregar la publicación", Toast.LENGTH_SHORT).show();
-                                        //Log.e("Firestore", "Error al agregar la publicación", e);
-                                    });
-                        });
-                    })
-                    .addOnFailureListener(e -> {
-                        // Error al cargar la imagen a Firebase Storage
-                        Log.e(TAG, "Error al cargar la imagen", e);
-                        Toast.makeText(Activity_Taller_Cultural.this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
-                    });
         }
     }
 }

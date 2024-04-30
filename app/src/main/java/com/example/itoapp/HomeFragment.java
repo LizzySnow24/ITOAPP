@@ -59,6 +59,13 @@ public class HomeFragment extends Fragment {
 
         //este es mi boton flotante
         FloatingActionButton boton_publicar = view.findViewById(R.id.boton_publicar);
+        boton_publicar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("DEBUG", "Valor de rol: y si jalo el onclic " + rol);
+                abrir_crearPubli(); // Método para abrir la nueva actividad
+            }
+        });
 
         // Obtener el rol desde la actividad Menu
         if (getArguments() != null) {
@@ -75,13 +82,7 @@ public class HomeFragment extends Fragment {
             }
         }
 
-        boton_publicar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("DEBUG", "Valor de rol: y si jalo el onclic " + rol);
-                abrir_crearPubli(); // Método para abrir la nueva actividad
-            }
-        });
+
 
         lista_datos = new ArrayList<>();
 

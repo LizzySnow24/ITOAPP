@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/ama"
-    tools:context=".Activity_Taller_Civico">
+    tools:context=".Activity_ServicioSocial">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -34,7 +34,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="20dp"
-                    android:text="Talleres"
+                    android:text="Sevicio Social"
                     android:textColor="@color/cafe"
                     android:textSize="35dp"
                     android:textStyle="bold" />
@@ -76,63 +76,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="10dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:lineSpacingExtra="-25sp"
-                android:paddingLeft="25dp"
-                android:text="CÍVICOS"
-                android:textColor="#000000"
-                android:textSize="40dp"
-                android:textStyle="bold" />
-
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycle_taller_civico"
+                android:id="@+id/recycle_servicioSocial"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginTop="8dp"
-                android:text="INICIO DE TALLERES"
-                android:textAlignment="center"
-                android:textColor="#000000"
-                android:textSize="18sp"
-                android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/textInicioTaller"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:fontFamily="sans-serif-condensed"
-                android:text="A PARTIR DEL MARTES 06 DE FEBRERO"
-                android:textAlignment="center"
-                android:textColor="#000000"
-                android:textSize="14sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:text="INSCRIPCIONES ABIERTAS"
-                android:textAlignment="center"
-                android:textColor="#000000"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="335dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:fontFamily="sans-serif-condensed"
-                android:text="ACUDE AL DEP. DE ACTIVIDADES EXTRAESCOLARES PIDE TU SOLICITUD DE INSCRIPCIÓN"
-                android:textAlignment="center"
-                android:textColor="#000000"
-                android:textSize="14sp" />
 
             <TextView
                 android:layout_width="wrap_content"

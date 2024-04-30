@@ -81,7 +81,7 @@
                         <ImageView
                             android:layout_width="80dp"
                             android:layout_height="80dp"
-                            />
+                            android:src="@drawable/cle" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -139,6 +139,7 @@
                     app:cardElevation="6dp">
 
                     <LinearLayout
+                        android:id="@+id/calendarioEscolar"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
@@ -238,6 +239,7 @@
                     app:cardElevation="6dp">
 
                     <LinearLayout
+                        android:id="@+id/serviciosocial"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"

@@ -162,7 +162,54 @@ public class Activity_Academicos extends AppCompatActivity {
             if (!newUbicacion.isEmpty()) {
                 textos_academicos.put("ubicacion", newUbicacion);
             }
+            if(selectedImageUri!=null) {
+                // Obtén una referencia a la ubicación donde se guardará la imagen en Storage
+                StorageReference imagenRef = storageRef.child("imagenes_personal/imagenes_academico" + UUID.randomUUID().toString());
 
+                // Sube la imagen seleccionada a Firebase Storage
+                imagenRef.putFile(selectedImageUri)
+                        .addOnSuccessListener(taskSnapshot -> {
+                            // Obtiene la URL de la imagen recién subida
+                            imagenRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                String imageUrl = uri.toString();
+                                // Notificar al adaptador sobre el cambio en los datos
+                                textos_academicos.put("url_imagen", imageUrl);
+
+                                //Referencia de la base de datos donde tengo almacenados las imagenes y texto
+                                DocumentReference documentoRef = db.collection("Personal_Academico")
+                                        .document("academico");
+                                // Cargamos los datos
+                                CollectionReference publicacionesRef = documentoRef.collection("publicaciones");
+
+                                // Después de agregar la publicación a la base de datos con éxito
+                                publicacionesRef.add(textos_academicos)
+                                        .addOnSuccessListener(documentReference -> {
+                                            // Crear un objeto DatosPublicacionTalleres con los datos ingresados
+                                            PublicacionDatosPersonal nuevaPublicacion = new PublicacionDatosPersonal();
+                                            nuevaPublicacion.setNombre(newNombre);
+                                            nuevaPublicacion.setCargo(newCargo);
+                                            nuevaPublicacion.setCorreo(newCorreo);
+                                            nuevaPublicacion.setTelefono(newTelefono);
+                                            nuevaPublicacion.setExtension(newExtension);
+                                            nuevaPublicacion.setUbicacion(newUbicacion);
+
+                                            // Agregar la nueva publicación a la lista
+                                            lista_datos_academicos.add(nuevaPublicacion);
+
+                                            // Notificar al adaptador sobre el cambio en los datos
+                                            mAdapter.notifyDataSetChanged();
+
+                                            // Mostrar un mensaje de éxito
+                                            Toast.makeText(Activity_Academicos.this, "Publicación agregada correctamente", Toast.LENGTH_SHORT).show();
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            // Mostrar un mensaje de error en caso de falla
+                                            Toast.makeText(Activity_Academicos.this, "Error al agregar la publicación", Toast.LENGTH_SHORT).show();
+                                            //Log.e("Firestore", "Error al agregar la publicación", e);
+                                        });
+                            });
+                        });
+            }
         });
 
         builder.setNegativeButton("Cancelar", (dialog, which) -> {
@@ -193,54 +240,6 @@ public class Activity_Academicos extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             // Obtener la URI de la imagen seleccionada
             selectedImageUri = data.getData();
-
-            // Obtén una referencia a la ubicación donde se guardará la imagen en Storage
-            StorageReference imagenRef = storageRef.child("imagenes_personal/imagenes_academico" + UUID.randomUUID().toString());
-
-            // Sube la imagen seleccionada a Firebase Storage
-            imagenRef.putFile(selectedImageUri)
-                    .addOnSuccessListener(taskSnapshot -> {
-                        // Obtiene la URL de la imagen recién subida
-                        imagenRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                            String imageUrl = uri.toString();
-                            // Notificar al adaptador sobre el cambio en los datos
-                            textos_academicos.put("url_imagen", imageUrl);
-                            mAdapter.notifyDataSetChanged();//esto
-
-                            //Referencia de la base de datos donde tengo almacenados las imagenes y texto
-                            DocumentReference documentoRef = db.collection("Personal_Academico")
-                                    .document("academico");
-                            // Cargamos los datos
-                            CollectionReference publicacionesRef = documentoRef.collection("publicaciones");
-
-                            // Después de agregar la publicación a la base de datos con éxito
-                            publicacionesRef.add(textos_academicos)
-                                    .addOnSuccessListener(documentReference -> {
-                                        // Crear un objeto DatosPublicacionTalleres con los datos ingresados
-                                        PublicacionDatosPersonal nuevaPublicacion = new PublicacionDatosPersonal();
-                                        nuevaPublicacion.setNombre(newNombre);
-                                        nuevaPublicacion.setCargo(newCargo);
-                                        nuevaPublicacion.setCorreo(newCorreo);
-                                        nuevaPublicacion.setTelefono(newTelefono);
-                                        nuevaPublicacion.setExtension(newExtension);
-                                        nuevaPublicacion.setUbicacion(newUbicacion);
-
-                                        // Agregar la nueva publicación a la lista
-                                        lista_datos_academicos.add(nuevaPublicacion);
-
-                                        // Notificar al adaptador sobre el cambio en los datos
-                                        mAdapter.notifyDataSetChanged();
-
-                                        // Mostrar un mensaje de éxito
-                                        Toast.makeText(Activity_Academicos.this, "Publicación agregada correctamente", Toast.LENGTH_SHORT).show();
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        // Mostrar un mensaje de error en caso de falla
-                                        Toast.makeText(Activity_Academicos.this, "Error al agregar la publicación", Toast.LENGTH_SHORT).show();
-                                        //Log.e("Firestore", "Error al agregar la publicación", e);
-                                    });
-                        });
-                    });
         }
     }
 }

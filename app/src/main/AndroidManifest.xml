@@ -15,6 +15,9 @@
         android:theme="@style/Theme.ITOAPP"
         tools:targetApi="31">
         <activity
+            android:name=".Activity_ServicioSocial"
+            android:exported="false" />
+        <activity
             android:name=".Activity_Planeacion"
             android:exported="false" />
         <activity
