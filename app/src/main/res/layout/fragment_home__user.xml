@@ -1,24 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ama"
-    tools:context=".HomeFragment">
-
-    <!-- Botón flotante -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/boton_publicar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ave_sombreado"
-        app:backgroundTint="@color/white"
-        app:elevation="6dp"
-        app:fabSize="normal"
-        />
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".HomeFragment_User"
+    android:background="@color/ama">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,7 +26,7 @@
             <!-- TextView para mostrar el texto -->
             <TextView
                 android:id="@+id/text_view"
-                android:layout_width="290dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginBottom="8dp"
                 android:gravity="center_vertical"
@@ -50,7 +37,7 @@
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycle_Publicacion_Noticias"
+            android:id="@+id/recycle_Publicacion_User"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             >
@@ -58,5 +45,6 @@
         </androidx.recyclerview.widget.RecyclerView>
 
     </LinearLayout>
+
 
 </FrameLayout>

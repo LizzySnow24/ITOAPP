@@ -82,7 +82,6 @@ public class Activity_Academicos extends AppCompatActivity {
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         PublicacionDatosPersonal publicacion = document.toObject(PublicacionDatosPersonal.class);
                         lista_datos_academicos.add(publicacion);
-                        //Log.d("DATO CIVICO",publicacion.getHorario());
                     }
                     mAdapter.notifyDataSetChanged();
                 })

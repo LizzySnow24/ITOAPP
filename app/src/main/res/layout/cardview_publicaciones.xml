@@ -12,29 +12,46 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/image_view"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/logo2" />
+                android:src="@drawable/logo2"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <!-- TextView para mostrar el texto -->
             <TextView
                 android:id="@+id/text_view"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_gravity="center_vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="8dp"
+                android:text="Instituto Tecnológico de Ocotlán"
                 android:textColor="@color/cafe"
-                android:text="   Instituto Tecnológico de Ocotlán"
+                android:textSize="17sp"
                 android:textStyle="bold"
-                android:textSize="16dp"/>
-        </LinearLayout>
+                app:layout_constraintBottom_toBottomOf="@+id/image_view"
+                app:layout_constraintStart_toEndOf="@+id/image_view"
+                app:layout_constraintTop_toTopOf="@+id/image_view" />
+
+            <ImageButton
+                android:id="@+id/boton_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/delete"
+                android:background="@android:color/transparent"
+                app:layout_constraintBottom_toBottomOf="@+id/image_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/image_view" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- RecyclerView para mostrar las imágenes -->
         <androidx.recyclerview.widget.RecyclerView

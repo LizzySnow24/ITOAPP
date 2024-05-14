@@ -19,9 +19,13 @@ public class Menu extends AppCompatActivity {
     private int seleccion = 1;
     //la variable que almacena el rol de usuario que ingreso en ese momento
     private static String rol;
+    private static String num_control;
 
     public static String getRol() {
         return rol;
+    }
+    public static String getNum_control() {
+        return num_control;
     }
 
     @Override
@@ -31,24 +35,9 @@ public class Menu extends AppCompatActivity {
 
         // Obtener el rol de la clase MainActivity (login)
         rol = getIntent().getStringExtra("rol");
+        num_control = getIntent().getStringExtra("num_control");
 
-        Toast.makeText(Menu.this, "Este es el Rol en menu: "+rol, Toast.LENGTH_SHORT).show();
-
-        Bundle bundle = new Bundle();
-
-        bundle.putString("rol", rol);
-
-        //Mando al fragment
-        HomeFragment fragment = new HomeFragment();
-        fragment.setArguments(bundle);
-
-        // Mostrar el fragmento en el contenedor correspondiente
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction =
-                fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragmentContainer,fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        //Toast.makeText(Menu.this, "Este es el Rol en menu: "+rol, Toast.LENGTH_SHORT).show();
 
         final LinearLayout HomeLayout = findViewById(R.id.homeLayout);
         final LinearLayout OptionsLayout = findViewById(R.id.OptionsLayout);
@@ -63,21 +52,38 @@ public class Menu extends AppCompatActivity {
         final TextView ProfilText = findViewById(R.id.ProfilText);
 
         //agregamos la pantalla de home para que aparezca por default
-        getSupportFragmentManager().beginTransaction()
-                        .setReorderingAllowed(true)
-                                .replace(R.id.fragmentContainer, HomeFragment.class,null)
-                                        .commit();
+        if(!rol.equals("admin")) {
+            getSupportFragmentManager().beginTransaction()
+                    .setReorderingAllowed(true)
+                    .replace(R.id.fragmentContainer, HomeFragment_User.class, null)
+                    .commit();
+        }else{
+            getSupportFragmentManager().beginTransaction()
+                    .setReorderingAllowed(true)
+                    .replace(R.id.fragmentContainer, HomeFragment.class, null)
+                    .commit();
+        }
         HomeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //verificamos que el selector esta en home
                 if(seleccion != 1){
 
-                    //agregamos la pantalla de home
-                    getSupportFragmentManager().beginTransaction()
-                            .setReorderingAllowed(true)
-                            .replace(R.id.fragmentContainer, HomeFragment.class,null)
-                            .commit();
+                    if(!rol.equals("admin")) {
+                        //agregamos la pantalla de home usuario
+                        Toast.makeText(Menu.this, "Rol es esto: " + rol, Toast.LENGTH_SHORT).show();
+                        getSupportFragmentManager().beginTransaction()
+                                .setReorderingAllowed(true)
+                                .replace(R.id.fragmentContainer, HomeFragment_User.class, null)
+                                .commit();
+                    }else{
+                        Toast.makeText(Menu.this, "Rol es esto admin: " + rol, Toast.LENGTH_SHORT).show();
+                        //agregamos la pantalla de home admin
+                        getSupportFragmentManager().beginTransaction()
+                                .setReorderingAllowed(true)
+                                .replace(R.id.fragmentContainer, HomeFragment.class, null)
+                                .commit();
+                    }
 
                     //las otras pestañas esperan a ser seleccionadas
                     OptionsText.setVisibility(View.GONE);
@@ -145,11 +151,20 @@ public class Menu extends AppCompatActivity {
             public void onClick(View v) {
                 if(seleccion != 3){
 
-                    //agregamos la pantalla de opciones
-                    getSupportFragmentManager().beginTransaction()
-                            .setReorderingAllowed(true)
-                            .replace(R.id.fragmentContainer, HomeFragment.class,null)
-                            .commit();
+                    if(!rol.equals("admin")) {
+                        //Toast.makeText(Menu.this, "Rol es: " + rol, Toast.LENGTH_SHORT).show();
+                        //agregamos la pantalla de opciones
+                        getSupportFragmentManager().beginTransaction()
+                                .setReorderingAllowed(true)
+                                .replace(R.id.fragmentContainer, Fragment_Perfil.class, null)
+                                .commit();
+                    }else{
+                        //agregamos la pantalla de opciones
+                        getSupportFragmentManager().beginTransaction()
+                                .setReorderingAllowed(true)
+                                .replace(R.id.fragmentContainer, Fragment_Perfil_Admin.class, null)
+                                .commit();
+                    }
 
                     //las otras pestañas esperan a ser seleccionadas
                     OptionsText.setVisibility(View.GONE);

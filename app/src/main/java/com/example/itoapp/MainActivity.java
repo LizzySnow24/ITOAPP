@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
                                                                     String rol = documentSnapshot.getString("rol");
                                                                     Intent i = new Intent(MainActivity.this, Menu.class);
                                                                     i.putExtra("rol", rol);
+                                                                    i.putExtra("num_control",numControl);
                                                                     startActivity(i);
                                                                 } else {
                                                                     // El usuario no tiene datos adicionales en Firestore

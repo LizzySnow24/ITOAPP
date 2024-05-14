@@ -218,14 +218,15 @@ public class activity_crearPubli extends AppCompatActivity {
         if (nombreImagen != null) {
             publicacion.put("nombreImagen", nombreImagen);
         }
+        if(semestreSeleccionado !=null){
+            publicacion.put("semestre",semestreSeleccionado);
+        }
 
         long fecha = System.currentTimeMillis();
         publicacion.put("fecha", fecha);
 
         publicacionesRef.add(publicacion)
                 .addOnSuccessListener(documentReference -> {
-                    String referenciaDocumento = documentReference.getId();
-                    String semestre = semestreSeleccionado;
                     Toast.makeText(activity_crearPubli.this, "Publicación agregada correctamente", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(activity_crearPubli.this, Menu.class);
                     startActivity(intent);

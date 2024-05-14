@@ -13,4 +13,6 @@
     <color name="home_20">#E9FFD863</color>
     <color name="perfil_20">#E9FFD863</color>
     <color name="menu_20">#E9FFD863</color>
+    <color name="azul">#0B1237</color>
+    <color name="gris">#181819</color>
 </resources>

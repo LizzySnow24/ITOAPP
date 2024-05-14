@@ -4,8 +4,8 @@
     style="@style/Widget.Material3.CardView.Elevated"
     android:layout_width="match_parent"
     android:layout_height="320dp"
-    app:cardCornerRadius="10dp"
     android:layout_margin="30dp"
+    app:cardCornerRadius="10dp"
     app:cardElevation="8dp">
 
     <LinearLayout
@@ -26,15 +26,38 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <TextView
-                android:id="@+id/nombre_personal"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAlignment="viewStart"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textColor="#000000"
-                android:textSize="18dp"
-                android:textStyle="bold" />
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/nombre_personal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="viewStart"
+                    android:textAppearance="?attr/textAppearanceHeadline6"
+                    android:textColor="#000000"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+
+                <ImageButton
+                    android:id="@+id/boton_delete_personal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/delete"
+                    app:layout_constraintBottom_toBottomOf="@+id/image_view"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/image_view"
+                    android:layout_gravity="right"
+                    />
+
+            </LinearLayout>
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -110,6 +133,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="#000000"
                 android:textSize="12sp" />
+
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

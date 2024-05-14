@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,18 +33,19 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements noticiasAdapter.OnDeleteClickListener {
     // Instancia de FirebaseFirestore
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     List <Datos_Publicacion> lista_datos;
     private RecyclerView mRecyclerView;
     private noticiasAdapter mAdapter;
-    private String rol;
-    private String roldef;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
 
     public HomeFragment() {
     }
@@ -59,30 +62,13 @@ public class HomeFragment extends Fragment {
 
         //este es mi boton flotante
         FloatingActionButton boton_publicar = view.findViewById(R.id.boton_publicar);
+
         boton_publicar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("DEBUG", "Valor de rol: y si jalo el onclic " + rol);
                 abrir_crearPubli(); // Método para abrir la nueva actividad
             }
         });
-
-        // Obtener el rol desde la actividad Menu
-        if (getArguments() != null) {
-            rol = getArguments().getString("rol");
-
-            // Verificar si el rol es "admin" para mostrar u ocultar el botón flotante
-            if (rol != null && rol.equals("admin")) {
-                Toast.makeText(getActivity(), "Rol es: " + rol, Toast.LENGTH_SHORT).show();
-                boton_publicar.setVisibility(View.VISIBLE);
-
-            } else{
-                boton_publicar.setVisibility(View.INVISIBLE);
-                Toast.makeText(getActivity(), "Este es rol: " + rol, Toast.LENGTH_SHORT).show();
-            }
-        }
-
-
 
         lista_datos = new ArrayList<>();
 
@@ -105,6 +91,8 @@ public class HomeFragment extends Fragment {
                                     // Iterar sobre los documentos obtenidos
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         Datos_Publicacion data = new Datos_Publicacion();
+                                        data.setID(document.getId());
+                                        data.setSemestre(document.getString("semestre"));
                                         data.setTexto(document.getString("texto"));
                                         data.setFecha(document.getLong("fecha"));
                                         data.setImageId((List<String>) document.get("imagenes"));
@@ -122,6 +110,7 @@ public class HomeFragment extends Fragment {
                     // Configurar RecyclerView y su adaptador
                     mRecyclerView = view.findViewById(R.id.recycle_Publicacion_Noticias);
                     mAdapter = new noticiasAdapter(getActivity(), lista_datos);
+                    mAdapter.setOnClickListener(HomeFragment.this);
                     mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                     mRecyclerView.setAdapter(mAdapter);
                 } else {
@@ -129,7 +118,6 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
-
         return view;
     }
 
@@ -137,5 +125,81 @@ public class HomeFragment extends Fragment {
     private void abrir_crearPubli() {
         Intent intent = new Intent(getActivity(), activity_crearPubli.class);
         startActivity(intent);
+    }
+
+    public void onDeleteClick(String publicacionId,String semestre){
+        DocumentReference semestreDocRef = db.collection("Semestre").document(semestre);
+
+        // Referencia de la colección "Semestre" en la base de datos Firestore
+        CollectionReference semestreRef =semestreDocRef.collection("publicaciones");
+
+        // Obtener el URL de la imagen antes de eliminar el documento
+        DocumentReference publicacionDocRef = semestreRef.document(publicacionId);
+        publicacionDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    // Obtener la lista de URLs de las imágenes del documento
+                    List<String> urlsImagenes = (List<String>) documentSnapshot.get("imagenes");
+
+                    if (urlsImagenes != null && !urlsImagenes.isEmpty()) {
+                        // Eliminar el documento de Firestore
+                        publicacionDocRef.delete()
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        // El documento se eliminó exitosamente de Firestore
+                                        Log.d(TAG, "Documento eliminado correctamente");
+
+                                        // Ahora, eliminar las imágenes del almacenamiento (Storage)
+                                        for (String urlImagen : urlsImagenes) {
+                                            eliminarImagenDeStorage(urlImagen);
+                                        }
+                                        // Mostrar mensaje de publicación eliminada correctamente
+                                        Toast.makeText(getContext(), "Publicación eliminada correctamente", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        // Ocurrió un error al intentar eliminar el documento de Firestore
+                                        Log.w(TAG, "Error al eliminar documento de Firestore", e);
+
+                                        // Manejar el error de eliminación del documento de Firestore
+                                    }
+                                });
+                    } else {
+                        Log.d(TAG, "La lista de URLs de las imágenes es nula o vacía");
+                    }
+                } else {
+                    Log.d(TAG, "El documento no existe");
+                }
+            }
+        });
+    }
+    public void eliminarImagenDeStorage(String url_imagen){
+        // Obtener una referencia al archivo de Storage que deseas eliminar
+        StorageReference imagenRef = storage.getReferenceFromUrl(url_imagen);
+
+        // Eliminar el archivo de Storage
+        imagenRef.delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // El archivo de Storage se eliminó exitosamente
+                        Log.d(TAG, "Imagen eliminada correctamente de Storage");
+
+                        // Aquí puedes realizar cualquier otra acción necesaria después de eliminar la imagen
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Ocurrió un error al intentar eliminar la imagen de Storage
+                        Log.w(TAG, "Error al eliminar imagen de Storage", e);
+
+                        // Manejar el error de eliminación de la imagen de Storage
+                    }
+                });
     }
 }

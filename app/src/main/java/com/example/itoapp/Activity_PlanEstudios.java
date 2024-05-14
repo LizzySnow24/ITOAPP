@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -16,11 +18,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -28,18 +33,28 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import org.w3c.dom.Text;
+
 import java.util.UUID;
 
 public class Activity_PlanEstudios extends AppCompatActivity {
 
     private ScaleGestureDetector scaleGestureDetector;
     private GestureDetector gestureDetector;
-
+    Spinner materias_carreras;
     private static String rol;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private StorageReference storageRef = storage.getReference();
     private DocumentReference documentoRef;
+    private DocumentReference documentoRef2;
+    private TextView textmateria1;
+    private TextView textmateria2;
+    private TextView textmateria3;
+    private TextView textmateria4;
+    private TextView textmateria5;
+    private TextView textmateria6;
+    private TextView textmateria7;
     String imagenurl;
 
     @Override
@@ -48,6 +63,14 @@ public class Activity_PlanEstudios extends AppCompatActivity {
         setContentView(R.layout.activity_plan_estudios);
 
         FloatingActionButton boton_editar = findViewById(R.id.boton_editar);
+
+        textmateria1 = findViewById(R.id.materia1);
+        textmateria2= findViewById(R.id.materia2);
+        textmateria3 = findViewById(R.id.materia3);
+        textmateria4 = findViewById(R.id.materia4);
+        textmateria5 = findViewById(R.id.materia5);
+        textmateria6 = findViewById(R.id.materia6);
+        textmateria7 = findViewById(R.id.materia7);
 
         String rol = Menu.getRol();
 
@@ -58,23 +81,53 @@ public class Activity_PlanEstudios extends AppCompatActivity {
         } else {
             boton_editar.setVisibility(View.GONE);
         }
+
+        boton_editar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         // Obtener referencia al Spinner
         Spinner lista_Carreras = findViewById(R.id.lista_carreras);
 
         // Obtener referencia al Spinner
-        Spinner materias_carrera = findViewById(R.id.materias_carrera);
+        materias_carreras = findViewById(R.id.materias_carrera);
 
         // Agregar un listener al Spinner para detectar cambios de selección
+        // Listener para el Spinner lista_Carreras
         lista_Carreras.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // Llamar a MandarDatos() cuando se selecciona un elemento en el Spinner
+                // Obtener la carrera seleccionada
                 String CarreraSeleccionada = lista_Carreras.getSelectedItem().toString();
-                String SemestreSeleccionado = lista_Carreras.getSelectedItem().toString();
-                MandarDatos(CarreraSeleccionada,SemestreSeleccionado);
+                // Obtener el semestre actualmente seleccionado
+                String SemestreSeleccionado = materias_carreras.getSelectedItem().toString();
+                // Llamar a MandarDatos con la carrera seleccionada y el semestre actualmente seleccionado
+                MandarDatos(CarreraSeleccionada, SemestreSeleccionado);
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+                // Acciones si no se selecciona nada
+            }
+        });
+
+// Listener para el Spinner materias_carreras
+        materias_carreras.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Obtener el semestre seleccionado
+                String SemestreSeleccionado = materias_carreras.getSelectedItem().toString();
+                // Obtener la carrera actualmente seleccionada
+                String CarreraSeleccionada = lista_Carreras.getSelectedItem().toString();
+                // Llamar a MandarDatos con el semestre seleccionado y la carrera actualmente seleccionada
+                MandarDatos(CarreraSeleccionada, SemestreSeleccionado);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Acciones si no se selecciona nada
             }
         });
 
@@ -89,46 +142,49 @@ public class Activity_PlanEstudios extends AppCompatActivity {
                 "7mo. Semestre", "8vo. Semestre"};
         ArrayAdapter adapterMaterias = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item, materiasCarrera);
         adapterMaterias.setDropDownViewResource(R.layout.spinner_item);
-        materias_carrera.setAdapter(adapterMaterias);
+        materias_carreras.setAdapter(adapterMaterias);
     }
 
     public void MandarDatos(String CarreraSeleccionada,String materias_carrera){
         ImageView imagen_reticula = findViewById(R.id.reticula_image);
 
-
-        if(CarreraSeleccionada.equals("Seleccionar semestre")) {
-            Toast.makeText(this, "Por favor, seleccione un semestre para continuar", Toast.LENGTH_SHORT).show();
-            return;
-        }
         StorageReference imagenRef=null;
 
         switch(CarreraSeleccionada){
             case "Sistemas Computacionales":
-                Toast.makeText(Activity_PlanEstudios.this, "entro", Toast.LENGTH_SHORT).show();
                 //referencia a storage
                 imagenRef = storageRef.child("imagenes_reticula/reticula_sistemas" + UUID.randomUUID().toString());
                 //Referencia de la base de datos donde tengo almacenados las imagenes y texto
                 documentoRef = db.collection("Plan_Estudios")
                         .document("reticula_sistemas");
 
+                materias_carreras.setVisibility(View.VISIBLE);
+
                 //materias carrera de sistemas
                 switch(materias_carrera){
                     case "1er. Semestre":
-
+                        Llenar("1er. Semestre", "sistemas");
                         break;
                     case "2do. Semestre":
+                        Llenar("2do. Semestre","sistemas");
                         break;
                     case "3er. Semestre":
+                        Llenar("3er. Semestre","sistemas");
                         break;
                     case "4to. Semestre":
+                        Llenar("4to. Semestre","sistemas");
                         break;
                     case "5to. Semestre":
+                        Llenar("5to. Semestre","sistemas");
                         break;
                     case "6to. Semestre":
+                        Llenar("6to. Semestre","sistemas");
                         break;
                     case "7mo. Semestre":
+                        Llenar("7mo. Semestre","sistemas");
                         break;
                     case "8vo. Semestre":
+                        Llenar("8vo. Semestre","sistemas");
                         break;
                 }
                 break;
@@ -137,23 +193,32 @@ public class Activity_PlanEstudios extends AppCompatActivity {
                 //Referencia de la base de datos donde tengo almacenados las imagenes y texto
                 documentoRef = db.collection("Plan_Estudios")
                         .document("reticula_electro");
+                materias_carreras.setVisibility(View.VISIBLE);
                 //materias carrera de sistemas
                 switch(materias_carrera){
                     case "1er. Semestre":
+                        Llenar("1er. Semestre", "electro");
                         break;
                     case "2do. Semestre":
+                        Llenar("2do. Semestre", "electro");
                         break;
                     case "3er. Semestre":
+                        Llenar("3er. Semestre", "electro");
                         break;
                     case "4to. Semestre":
+                        Llenar("4to. Semestre", "electro");
                         break;
                     case "5to. Semestre":
+                        Llenar("5to. Semestre", "electro");
                         break;
                     case "6to. Semestre":
+                        Llenar("6to. Semestre", "electro");
                         break;
                     case "7mo. Semestre":
+                        Llenar("7mo. Semestre", "electro");
                         break;
                     case "8vo. Semestre":
+                        Llenar("8vo. Semestre", "electro");
                         break;
                 }
                 break;
@@ -162,23 +227,32 @@ public class Activity_PlanEstudios extends AppCompatActivity {
                 //Referencia de la base de datos donde tengo almacenados las imagenes y texto
                 documentoRef = db.collection("Plan_Estudios")
                         .document("reticula_industrial");
+                materias_carreras.setVisibility(View.VISIBLE);
                 //materias carrera de sistemas
                 switch(materias_carrera){
                     case "1er. Semestre":
+                        Llenar("1er. Semestre", "industrial");
                         break;
                     case "2do. Semestre":
+                        Llenar("2do. Semestre", "industrial");
                         break;
                     case "3er. Semestre":
+                        Llenar("3er. Semestre", "industrial");
                         break;
                     case "4to. Semestre":
+                        Llenar("4to. Semestre", "industrial");
                         break;
                     case "5to. Semestre":
+                        Llenar("5to. Semestre", "industrial");
                         break;
                     case "6to. Semestre":
+                        Llenar("6to. Semestre", "industrial");
                         break;
                     case "7mo. Semestre":
+                        Llenar("7mo. Semestre", "industrial");
                         break;
                     case "8vo. Semestre":
+                        Llenar("8vo. Semestre", "industrial");
                         break;
                 }
                 break;
@@ -187,23 +261,32 @@ public class Activity_PlanEstudios extends AppCompatActivity {
                 //Referencia de la base de datos donde tengo almacenados las imagenes y texto
                 documentoRef = db.collection("Plan_Estudios")
                         .document("reticula_contador");
+                materias_carreras.setVisibility(View.VISIBLE);
                 //materias carrera de sistemas
                 switch(materias_carrera){
                     case "1er. Semestre":
+                        Llenar("1er. Semestre", "contador");
                         break;
                     case "2do. Semestre":
+                        Llenar("2do. Semestre", "contador");
                         break;
                     case "3er. Semestre":
+                        Llenar("3er. Semestre", "contador");
                         break;
                     case "4to. Semestre":
+                        Llenar("4to. Semestre", "contador");
                         break;
                     case "5to. Semestre":
+                        Llenar("5to. Semestre", "contador");
                         break;
                     case "6to. Semestre":
+                        Llenar("6to. Semestre", "contador");
                         break;
                     case "7mo. Semestre":
+                        Llenar("7mo. Semestre", "contador");
                         break;
                     case "8vo. Semestre":
+                        Llenar("8vo. Semestre", "contador");
                         break;
                 }
                 break;
@@ -212,23 +295,32 @@ public class Activity_PlanEstudios extends AppCompatActivity {
                 //Referencia de la base de datos donde tengo almacenados las imagenes y texto
                 documentoRef = db.collection("Plan_Estudios")
                         .document("reticula_gestion");
+                materias_carreras.setVisibility(View.VISIBLE);
                 //materias carrera de sistemas
                 switch(materias_carrera){
                     case "1er. Semestre":
+                        Llenar("1er. Semestre", "gestion");
                         break;
                     case "2do. Semestre":
+                        Llenar("2do. Semestre", "gestion");
                         break;
                     case "3er. Semestre":
+                        Llenar("3er. Semestre", "gestion");
                         break;
                     case "4to. Semestre":
+                        Llenar("4to. Semestre", "gestion");
                         break;
                     case "5to. Semestre":
+                        Llenar("5to. Semestre", "gestion");
                         break;
                     case "6to. Semestre":
+                        Llenar("6to. Semestre", "gestion");
                         break;
                     case "7mo. Semestre":
+                        Llenar("7mo. Semestre", "gestion");
                         break;
                     case "8vo. Semestre":
+                        Llenar("8vo. Semestre", "gestion");
                         break;
                 }
                 break;
@@ -237,23 +329,32 @@ public class Activity_PlanEstudios extends AppCompatActivity {
                 //Referencia de la base de datos donde tengo almacenados las imagenes y texto
                 documentoRef = db.collection("Plan_Estudios")
                         .document("reticula_logistica");
+                materias_carreras.setVisibility(View.VISIBLE);
                 //materias carrera de sistemas
                 switch(materias_carrera){
                     case "1er. Semestre":
+                        Llenar("1er. Semestre", "logistica");
                         break;
                     case "2do. Semestre":
+                        Llenar("2do. Semestre", "logistica");
                         break;
                     case "3er. Semestre":
+                        Llenar("3er. Semestre", "logistica");
                         break;
                     case "4to. Semestre":
+                        Llenar("4to. Semestre", "logistica");
                         break;
                     case "5to. Semestre":
+                        Llenar("5to. Semestre", "logistica");
                         break;
                     case "6to. Semestre":
+                        Llenar("6to. Semestre", "logistica");
                         break;
                     case "7mo. Semestre":
+                        Llenar("7mo. Semestre", "logistica");
                         break;
                     case "8vo. Semestre":
+                        Llenar("8vo. Semestre", "logistica");
                         break;
                 }
                 break;
@@ -327,5 +428,71 @@ public class Activity_PlanEstudios extends AppCompatActivity {
 
         // Mostrar el diálogo
         dialog.show();
+    }
+
+    public void Llenar(String semestre, String carrera){
+        documentoRef2 =  db.collection("Plan_Estudios").document("reticula_"+carrera)
+                .collection("semestre").document(semestre);
+        documentoRef2.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    String materia1 = documentSnapshot.getString("materia1");
+                    String materia2 = documentSnapshot.getString("materia2");
+                    String materia3 = documentSnapshot.getString("materia3");
+                    String materia4 = documentSnapshot.getString("materia4");
+                    String materia5 = documentSnapshot.getString("materia5");
+
+                    String enlace1 = documentSnapshot.getString("enlace1");
+                    String enlace2 = documentSnapshot.getString("enlace2");
+                    String enlace3 = documentSnapshot.getString("enlace3");
+                    String enlace4 = documentSnapshot.getString("enlace4");
+                    String enlace5 = documentSnapshot.getString("enlace5");
+
+                    //verificamos que hay un campo materia 6 y 7, si no hay setteamos una cadena vacia ("")
+                    String materia6 = documentSnapshot.contains("materia6") ? documentSnapshot.getString("materia6") : "";
+                    String materia7 = documentSnapshot.contains("materia7") ? documentSnapshot.getString("materia7") : "";
+
+                    //verificamos que hay un campo materia 6 y 7, si no hay setteamos una cadena vacia ("")
+                    String enlace6 = documentSnapshot.contains("enlace6") ? documentSnapshot.getString("enlace6") : "";
+                    String enlace7 = documentSnapshot.contains("enlace7") ? documentSnapshot.getString("enlace7") : "";
+
+
+                    textmateria1.setText(materia1);
+                    textmateria2.setText(materia2);
+                    textmateria3.setText(materia3);
+                    textmateria4.setText(materia4);
+                    textmateria5.setText(materia5);
+                    textmateria6.setText(materia6);
+                    textmateria7.setText(materia7);
+
+                        // Mostrar un mensaje si el documento no existe
+                        //Toast.makeText(Activity_PlanEstudios.this, "Materia1"+materia1, Toast.LENGTH_SHORT).show();
+
+                    Clic(textmateria1,enlace1);
+                    Clic(textmateria2,enlace2);
+                    Clic(textmateria3,enlace3);
+                    Clic(textmateria4,enlace4);
+                    Clic(textmateria5,enlace5);
+                    Clic(textmateria6,enlace6);
+                    Clic(textmateria7,enlace7);
+                }
+            }
+        });
+    }
+    private void abrirEnlacePDF(String enlace) {
+        // Crear un Intent para abrir el navegador web con el enlace dado
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(enlace));
+        Uri fileUri = Uri.parse(enlace);
+        intent.setDataAndType(fileUri, "application/pdf");
+        startActivity(intent);
+    }
+    private void Clic(TextView texto, String enlace){
+        texto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                abrirEnlacePDF(enlace);
+            }
+        });
     }
 }
